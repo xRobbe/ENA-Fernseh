@@ -1,3 +1,5 @@
+package ena;
+
 import java.awt.EventQueue;
 import java.awt.Window;
 
