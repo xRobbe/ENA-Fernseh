@@ -31,6 +31,7 @@ public class Screen {
 	private JPanel panelWelcome;
 	private JPanel panelMainScreen;
 	private JProgressBar progressBarScreenWelcome;
+	private TvElectronics electronics;
 
 	private JLabel lblEPG = new JLabel("Channel");
 
@@ -108,6 +109,7 @@ public class Screen {
 		final JPanel panelScreenPiP = new JPanel();
 		panelScreenPiP.setBounds(886, 11, 384, 216);
 		panelMainScreen.add(panelScreenPiP);
+		panelScreenPiP.setVisible(false);
 		panelScreenPiP.setLayout(null);
 
 		final JScrollPane scrollPaneScreenStations = new JScrollPane();
@@ -185,8 +187,19 @@ public class Screen {
 				}
 			}
 		});
+		
+		if(electronics == null){
+			electronics = new TvElectronics(panelMainScreen, panelScreenPiP);
+			System.out.println("TvElectronics wurde erstellt");
+		}
+		else
+			System.out.println("TvElectronics ist schon vorhandne");
 	}
-
+	
+	public TvElectronics getElectronics(){
+		return electronics;
+	}
+	
 	private void scrollPanelY(JComponent panel, int max, int min)
 			throws InterruptedException {
 		int time = 300 / Math.abs(max - min);

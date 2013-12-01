@@ -32,6 +32,7 @@ public class RemoteControl {
 	private JTable tableRemoteStations;
 	private Persistent persistent;
 	private static RemoteControl window;
+	private TvElectronics electronics = null;
 
 	private JButton btnRemotePiPSwitch;
 	private JButton btnRemotePiPActivate;
@@ -90,6 +91,7 @@ public class RemoteControl {
 					if (screen == null) {
 						screen = new Screen();
 						screen.setVisible(true);
+						electronics = screen.getElectronics();
 					} else {
 						if (screen.isVisible()) {
 							screen.setVisible(false);
@@ -122,11 +124,17 @@ public class RemoteControl {
 			btnRemotePiPActivate.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_PiP.png")));
 			btnRemotePiPActivate.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (btnRemotePiPSwitch.isEnabled())
+					if(electronics == null)
+						System.out.println("Kein screen vorhanden");
+					else{
+					if (btnRemotePiPSwitch.isEnabled()){
 						btnRemotePiPSwitch.setEnabled(false);
-					else
+						electronics.setPictureInPicture(false);
+					}else{
 						btnRemotePiPSwitch.setEnabled(true);
-				}
+						electronics.setPictureInPicture(true);
+					}
+				}}
 			});
 			btnRemotePiPActivate.setFocusPainted(false);
 			btnRemotePiPActivate.setToolTipText("Picture in Picture");
@@ -209,6 +217,7 @@ public class RemoteControl {
 			panelRemoteControl.add(btnRemoteTimeshiftStop);
 
 			btnRemoteTimeshiftPlayPause = new JButton();
+			btnRemoteTimeshiftPlayPause.setSelectedIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_play.png")));
 			btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_paus.png")));
 			btnRemoteTimeshiftPlayPause.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -218,7 +227,7 @@ public class RemoteControl {
 			});
 			btnRemoteTimeshiftPlayPause.setFocusPainted(false);
 			btnRemoteTimeshiftPlayPause.setToolTipText("Start/Pause Timeshift");
-			btnRemoteTimeshiftPlayPause.setBounds(184, 552, 77, 77);
+			btnRemoteTimeshiftPlayPause.setBounds(141, 552, 77, 77);
 			panelRemoteControl.add(btnRemoteTimeshiftPlayPause);
 			
 			btnRemoteTimeshiftForwards = new JButton();

@@ -19,6 +19,7 @@ public class TvElectronics {
 	private boolean isRecording;		// der TimeShift-Recorder nimmt momentan auf
 	private long recordingStartTime;	// zu diesem Zeitpunkt hat die TimeShift-Aufnahme begonnen (in Sekunden seit 1.1.1970)
 
+
 	/**
 	 * Der Konstruktur übernimmt Referenzen auf die beiden JPanel-Objekte, die die Displays repräsentieren.
 	 * 
@@ -116,9 +117,7 @@ public class TvElectronics {
 	 */
 	public void setPictureInPicture(boolean show) {
 		System.out.println("PiP = " + (show ? "visible" : "hidden"));		
-
-		// TO DO (Aufgabe 4): Machen Sie hier this.pipDisplay sichtbar bzw. unsichtbar!
-		
+		this.pipDisplay.setVisible(show);
 	}
 	
 	/**
@@ -164,28 +163,28 @@ public class TvElectronics {
 	 * 
 	 * @param args    Aufrufparameter werden ignoriert
 	 */
-	public static void main(String[] args) {
-		try {
-			TvElectronics tvEl = new TvElectronics(new JPanel(), new JPanel());
-			
-			ArrayList<Object> channels = tvEl.scanChannels();
-			tvEl.setChannel("37a", false);
-			tvEl.setChannel("54d", true);
-			tvEl.setPictureInPicture(true);
-			tvEl.setVolume(47);
-			tvEl.setZoom(true);
-			tvEl.recordTimeShift(true);
-			while (tvEl.recordingStartTime + 3 > tvEl.now())
-				;	// provisorische Warteschleife (Thread wäre ordentlicher)
-			tvEl.playTimeShift(true, 2);
-			tvEl.playTimeShift(false, 0);
-			tvEl.playTimeShift(true, 3);
-			tvEl.recordTimeShift(false);
-		} 
-		catch (Exception e) {
-			System.out.println("ERROR: " + e.getMessage());
-		}
-
-	}
+//	public static void main(String[] args) {
+//	try {
+//			TvElectronics tvEl = new TvElectronics(new JPanel(), new JPanel());
+//			
+//			ArrayList<Object> channels = tvEl.scanChannels();
+//			tvEl.setChannel("37a", false);
+//			tvEl.setChannel("54d", true);
+//			tvEl.setPictureInPicture(true);
+//			tvEl.setVolume(47);
+//			tvEl.setZoom(true);
+//			tvEl.recordTimeShift(true);
+///			while (tvEl.recordingStartTime + 3 > tvEl.now())
+//				;	// provisorische Warteschleife (Thread wäre ordentlicher)
+//			tvEl.playTimeShift(true, 2);
+//			tvEl.playTimeShift(false, 0);
+//			tvEl.playTimeShift(true, 3);
+//			tvEl.recordTimeShift(false);
+//		} 
+//		catch (Exception e) {
+//			System.out.println("ERROR: " + e.getMessage());
+//		}
+//
+//	}
 
 }
