@@ -1,7 +1,5 @@
 package ena;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -30,31 +28,12 @@ import java.awt.Rectangle;
 public class Screen {
 
 	private JFrame frame;
-	private final JPanel panelWelcome = new JPanel();
+	private JPanel panelWelcome;
 	private JPanel panelMainScreen;
 	private JProgressBar progressBarScreenWelcome;
-	
-	private final static JLabel lblPernis = new JLabel("Sender");
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Screen window = new Screen();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the application.
-	 */
+	private JLabel lblEPG = new JLabel("Channel");
+
 	public Screen() {
 		initialize();
 	}
@@ -69,120 +48,109 @@ public class Screen {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
-																																				panelWelcome.setBounds(0, 0, 1280, 720);
-																																				frame.getContentPane().add(panelWelcome);
-																																				panelWelcome.setLayout(null);
-																																				
-																																						JLabel lblScreenWelcomeMessage = new JLabel("Welcome");
-																																						lblScreenWelcomeMessage.setFont(new Font("Tahoma", Font.BOLD, 50));
-																																						lblScreenWelcomeMessage.setBounds(440, 98, 400, 100);
-																																						lblScreenWelcomeMessage.setHorizontalAlignment(SwingConstants.CENTER);
-																																						panelWelcome.add(lblScreenWelcomeMessage);
-																																						
-																																								progressBarScreenWelcome = new JProgressBar();
-																																								progressBarScreenWelcome.setBounds(320, 333, 640, 38);
-																																								panelWelcome.add(progressBarScreenWelcome);
-																																								
-																																										JLabel lblScreenWelcomeStatus = new JLabel("Your TV is getting ready");
-																																										lblScreenWelcomeStatus.setFont(new Font("Tahoma", Font.PLAIN, 50));
-																																										lblScreenWelcomeStatus.setHorizontalAlignment(SwingConstants.CENTER);
-																																										lblScreenWelcomeStatus.setBounds(320, 223, 640, 63);
-																																										panelWelcome.add(lblScreenWelcomeStatus);
-																																										
-																																												JButton btnScreenWelcomeDebugDone = new JButton("Done");
-																																												btnScreenWelcomeDebugDone.addActionListener(new RunnableActionListener() {
-																																															public void actionPerformed(ActionEvent arg0) {
-																																																new Thread(this).start();
-																																															}
+		panelWelcome = new JPanel();
+		panelWelcome.setBounds(0, 0, 1280, 720);
+		frame.getContentPane().add(panelWelcome);
+		panelWelcome.setLayout(null);
 
-																																															public void run() {
-																																																while (progressBarScreenWelcome.getValue() < progressBarScreenWelcome
-																																																		.getMaximum()) {
-																																																	progressBarScreenWelcome
-																																																			.setValue(progressBarScreenWelcome
-																																																					.getValue() + 1);
-																																																	try {
-																																																		if (progressBarScreenWelcome.getValue() % 25 == 0
-																																																				&& progressBarScreenWelcome.getValue() < 100)
-																																																			Thread.sleep(1000);
-																																																		Thread.sleep(30);
-																																																	} catch (InterruptedException ie) {
-																																																		// TODO Auto-generated catch block
-																																																		ie.printStackTrace();
-																																																	}
-																																																}
-																																																panelWelcome.setVisible(false);
-																																																panelMainScreen.setVisible(true);
-																																															}
-																																													});
-																																												btnScreenWelcomeDebugDone.setBounds(575, 437, 89, 23);
-																																												panelWelcome.add(btnScreenWelcomeDebugDone);
-																																												
-																																														panelMainScreen = new JPanel();
-																																														panelMainScreen.setVisible(false);
-																																														panelMainScreen.setBackground(new Color(0, 0, 0));
-																																														panelMainScreen.setBounds(0, 0, 1280, 720);
-																																														frame.getContentPane().add(panelMainScreen);
-																																														panelMainScreen.setLayout(null);
-																																																
-																																																		final JPanel panelScreenEPG = new JPanel();
-																																																		panelScreenEPG.setBackground(new Color(164, 164, 164));
-																																																		panelScreenEPG.setBounds(256, 720, 768, 128);
-																																																		panelMainScreen.add(panelScreenEPG);
-																																																		panelScreenEPG.setVisible(false);
-																																																		panelScreenEPG.setLayout(new BorderLayout(0, 0));
-																																																				lblPernis.setForeground(Color.BLACK);
-																																																				panelScreenEPG.add(lblPernis, BorderLayout.CENTER);
-																																																				lblPernis.setFont(new Font("Tahoma", Font.BOLD, 40));
-																																																				lblPernis.setHorizontalAlignment(SwingConstants.CENTER);
-																																																				
-																																														
-																																																final JPanel panelScreenPiP = new JPanel();
-																																																panelScreenPiP.setBounds(886, 11, 384, 216);
-																																																panelMainScreen.add(panelScreenPiP);
-																																																panelScreenPiP.setLayout(null);
-																																																
-																																																		final JScrollPane scrollPaneScreenStations = new JScrollPane();
-																																																		scrollPaneScreenStations.setBorder(null);
-																																																		scrollPaneScreenStations.setBackground(new Color(0, 0, 0));
-																																																		scrollPaneScreenStations.setBounds(new Rectangle(-256, 0, 256, 720));
-																																																		panelMainScreen.add(scrollPaneScreenStations);
-																																																		
-																																																				final JList<String> listScreenStations = new JList<String>();
-																																																				listScreenStations.setForeground(new Color(216, 0, 116));
-																																																				listScreenStations.setBackground(new Color(164, 164, 164));
-																																																				listScreenStations.setBorder(null);
-																																																				scrollPaneScreenStations.setViewportView(listScreenStations);
-																																																				listScreenStations.setFont(new Font("Tahoma", Font.BOLD, 20));
-																																																				listScreenStations.setModel(new AbstractListModel<String>() {
-																																																					String[] values = new String[] { "1 ARD", "2 ZDF", "3 RTL",
-																																																							"4 SAT1", "5 PRO7", "6 RTL2", "7 SUPER RTL", "8 KIKA",
-																																																							"9 ARTE", "10 Comedy Central", "11 Nickelodeon",
-																																																							"12 Kabel 1", "13 VOX", "14 MTV", "15 VIVA", "16 NTV",
-																																																							"17 N24", "18 HR3", "19 123TV", "20 MotorvisionTV",
-																																																							"21 Sport 1", "22 DMAX", "23 ASTRA TV", "24 ", "25", "26",
-																																																							"27", "28", "29", "30" };
+		JLabel lblScreenWelcomeMessage = new JLabel("Welcome");
+		lblScreenWelcomeMessage.setFont(new Font("Tahoma", Font.BOLD, 50));
+		lblScreenWelcomeMessage.setBounds(440, 98, 400, 100);
+		lblScreenWelcomeMessage.setHorizontalAlignment(SwingConstants.CENTER);
+		panelWelcome.add(lblScreenWelcomeMessage);
 
-																																																					public int getSize() {
-																																																						return values.length;
-																																																					}
+		progressBarScreenWelcome = new JProgressBar();
+		progressBarScreenWelcome.setBounds(320, 333, 640, 38);
+		panelWelcome.add(progressBarScreenWelcome);
 
-																																																					public String getElementAt(int index) {
-																																																						return values[index];
-																																																					}
-																																																				});
-																																																				
-																																																						JButton btnSenderliste = new JButton("Senderliste");
-																																																						btnSenderliste.setBounds(377, 293, 85, 23);
-																																																						panelMainScreen.add(btnSenderliste);
-																																																						
-																																																								JButton btnEpg = new JButton("EPG");
-																																																								btnEpg.setBounds(377, 327, 85, 23);
-																																																								panelMainScreen.add(btnEpg);
-																																																								
-																																																										JButton btnPip = new JButton("PiP");
-																																																										btnPip.setBounds(377, 361, 85, 23);
-																																																										panelMainScreen.add(btnPip);
+		JLabel lblScreenWelcomeStatus = new JLabel("Your TV is getting ready");
+		lblScreenWelcomeStatus.setFont(new Font("Tahoma", Font.PLAIN, 50));
+		lblScreenWelcomeStatus.setHorizontalAlignment(SwingConstants.CENTER);
+		lblScreenWelcomeStatus.setBounds(320, 223, 640, 63);
+		panelWelcome.add(lblScreenWelcomeStatus);
+
+		JButton btnScreenWelcomeDebugDone = new JButton("Done");
+		btnScreenWelcomeDebugDone.addActionListener(new RunnableActionListener() {
+			public void run() {
+				while (progressBarScreenWelcome.getValue() < progressBarScreenWelcome.getMaximum()) {
+					progressBarScreenWelcome.setValue(progressBarScreenWelcome.getValue() + 1);
+					try {
+						Thread.sleep(30);
+					} catch (InterruptedException ie) {
+						ie.printStackTrace();
+					}
+				}
+				panelWelcome.setVisible(false);
+				panelMainScreen.setVisible(true);
+			}
+		});
+		btnScreenWelcomeDebugDone.setBounds(575, 437, 89, 23);
+		panelWelcome.add(btnScreenWelcomeDebugDone);
+
+		panelMainScreen = new JPanel();
+		panelMainScreen.setVisible(false);
+		panelMainScreen.setBackground(new Color(0, 0, 0));
+		panelMainScreen.setBounds(0, 0, 1280, 720);
+		frame.getContentPane().add(panelMainScreen);
+		panelMainScreen.setLayout(null);
+
+		final JPanel panelScreenEPG = new JPanel();
+		panelScreenEPG.setBackground(new Color(164, 164, 164));
+		panelScreenEPG.setBounds(256, 720, 768, 128);
+		panelMainScreen.add(panelScreenEPG);
+		panelScreenEPG.setVisible(false);
+		panelScreenEPG.setLayout(new BorderLayout(0, 0));
+		lblEPG.setForeground(Color.BLACK);
+		panelScreenEPG.add(lblEPG, BorderLayout.CENTER);
+		lblEPG.setFont(new Font("Tahoma", Font.BOLD, 40));
+		lblEPG.setHorizontalAlignment(SwingConstants.CENTER);
+
+		final JPanel panelScreenPiP = new JPanel();
+		panelScreenPiP.setBounds(886, 11, 384, 216);
+		panelMainScreen.add(panelScreenPiP);
+		panelScreenPiP.setLayout(null);
+
+		final JScrollPane scrollPaneScreenStations = new JScrollPane();
+		scrollPaneScreenStations.setBorder(null);
+		scrollPaneScreenStations.setBackground(new Color(0, 0, 0));
+		scrollPaneScreenStations.setBounds(new Rectangle(-256, 0, 256, 720));
+		panelMainScreen.add(scrollPaneScreenStations);
+
+		final JList<String> listScreenStations = new JList<String>();
+		listScreenStations.setForeground(new Color(216, 0, 116));
+		listScreenStations.setBackground(new Color(164, 164, 164));
+		listScreenStations.setBorder(null);
+		scrollPaneScreenStations.setViewportView(listScreenStations);
+		listScreenStations.setFont(new Font("Tahoma", Font.BOLD, 20));
+		listScreenStations.setModel(new AbstractListModel<String>() {
+			String[] values = new String[] { "1 ARD", "2 ZDF", "3 RTL",
+					"4 SAT1", "5 PRO7", "6 RTL2", "7 SUPER RTL", "8 KIKA",
+					"9 ARTE", "10 Comedy Central", "11 Nickelodeon",
+					"12 Kabel 1", "13 VOX", "14 MTV", "15 VIVA", "16 NTV",
+					"17 N24", "18 HR3", "19 123TV", "20 MotorvisionTV",
+					"21 Sport 1", "22 DMAX", "23 ASTRA TV", "24 ", "25", "26",
+					"27", "28", "29", "30" };
+
+			public int getSize() {
+				return values.length;
+			}
+
+			public String getElementAt(int index) {
+				return values[index];
+			}
+		});
+
+		JButton btnSenderliste = new JButton("Senderliste");
+		btnSenderliste.setBounds(377, 293, 85, 23);
+		panelMainScreen.add(btnSenderliste);
+
+		JButton btnEpg = new JButton("EPG");
+		btnEpg.setBounds(377, 327, 85, 23);
+		panelMainScreen.add(btnEpg);
+
+		JButton btnPip = new JButton("PiP");
+		btnPip.setBounds(377, 361, 85, 23);
+		panelMainScreen.add(btnPip);
 		btnPip.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (panelScreenPiP.isVisible())
@@ -259,19 +227,19 @@ public class Screen {
 			}
 		}
 	}
-	
-	public void setLabel(String sName){
-		lblPernis.setText(sName);
+
+	public void setLabel(String sName) {
+		lblEPG.setText(sName);
 	}
-	
+
 	public void setVisible(boolean visible) {
 		frame.setVisible(visible);
 	}
-	
+
 	public boolean isVisible() {
 		return frame.isVisible();
 	}
-	
+
 	public void dispose() {
 		frame.dispose();
 	}

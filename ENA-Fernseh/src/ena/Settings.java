@@ -1,24 +1,15 @@
 package ena;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
-
-import java.awt.Window.Type;
 
 import javax.swing.JButton;
 
-import java.awt.Component;
-
-import javax.swing.Box;
-import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.io.FileOutputStream;
 
 import javax.swing.JProgressBar;
 
@@ -29,26 +20,6 @@ public class Settings {
 	private Persistent persistent;
 	private RemoteControl remote;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-//					Settings window = new Settings(window, persistent);
-//					window.frmSettings.setVisible(true);
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the application.
-	 */
 	public Settings(RemoteControl remote, Persistent p) {
 		  this.remote = remote;
 		  this.persistent = p;
@@ -59,9 +30,7 @@ public class Settings {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		try{
-		//persistent = new Persistent();
-		
+		try{		
 		frmSettings = new JFrame();
 		frmSettings.setTitle("Settings");
 		frmSettings.setBounds(100, 100, 400, 200);
@@ -88,7 +57,7 @@ public class Settings {
 				try{
 				persistent.setUsermode(comboBoxSettingsUsermode.getSelectedIndex());
 				persistent.setRatio(comboBoxSettingsAspectRatio.getSelectedIndex());
-				remote.updateScreen();
+				remote.updateButtonLayout();
 				frmSettings.dispose();
 				}catch(Exception e3){
 					e3.printStackTrace();
@@ -110,26 +79,6 @@ public class Settings {
 		JLabel lblSettingsUsermode = new JLabel("Usermodus");
 		lblSettingsUsermode.setBounds(82, 11, 90, 14);
 		frmSettings.getContentPane().add(lblSettingsUsermode);
-
-		
-//		JButton btnStationScan = new JButton("Station Scan");
-//		btnStationScan.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				try {
-//					btnSettingsSave.setEnabled(false);
-//					while (progressBarSettingsStationScan.getValue() < progressBarSettingsStationScan
-//							.getMaximum()) {
-//						progressBarSettingsStationScan
-//								.setValue(progressBarSettingsStationScan
-//										.getValue() + 1);
-//						Thread.sleep(50);
-//					}
-//					btnSettingsSave.setEnabled(true);
-//				} catch (Exception e1) {
-//					e1.printStackTrace();
-//				}
-//			}
-//		});
 
 		final JButton btnStationScan = new JButton("Station Scan");
 		btnStationScan.addActionListener(new RunnableActionListener() {
@@ -164,7 +113,6 @@ public class Settings {
 		}catch(Exception e2){
 			e2.printStackTrace();
 		}
-
 	}
 	
 	public void setVisible(boolean visible) {

@@ -13,7 +13,7 @@ public class Persistent {
 	private final static String USERMODE = "Usermode";
 	private final static int MAX_VOLUME = 100;
 	private final static int MAX_USERMODE = 2;
-	private final static int MAX_RATIO = 2;		//auf 2 wegen drei Formaten, die wir darstellen sollen
+	private final static int MAX_RATIO = 2;
 	
 	private Properties properties = new Properties();
 	private String config = Filepath;
