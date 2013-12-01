@@ -1,10 +1,12 @@
 package ena;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import java.awt.Color;
 
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
@@ -16,14 +18,16 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-
 import javax.swing.JProgressBar;
 
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
 
 public class Screen {
 
@@ -188,12 +192,25 @@ public class Screen {
 			}
 		});
 		
+		BufferedImage myPicture;
+		try {
+			myPicture = ImageIO.read(new File("src/television/kika.jpg"));
+			JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+			picLabel.setBounds(0, 0, 1280, 720);
+			picLabel.setOpaque(true);
+			panelMainScreen.add(picLabel);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		if(electronics == null){
 			electronics = new TvElectronics(panelMainScreen, panelScreenPiP);
 			System.out.println("TvElectronics wurde erstellt");
 		}
 		else
 			System.out.println("TvElectronics ist schon vorhandne");
+		
 	}
 	
 	public TvElectronics getElectronics(){
