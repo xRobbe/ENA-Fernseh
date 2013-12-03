@@ -40,6 +40,7 @@ public class Screen {
 	private JProgressBar progressBarScreenWelcome;
 	private TvElectronics electronics;
 	private Persistent persisten;
+	private JLabel picLabel;
 
 	private JLabel lblEPG = new JLabel("Channel");
 
@@ -168,6 +169,22 @@ public class Screen {
 					panelScreenPiP.setVisible(false);
 				else
 					panelScreenPiP.setVisible(true);
+				
+				try {		
+					BufferedImage newPicture;
+					newPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
+					panelMainScreen.remove(picLabel);
+					picLabel = new JLabel(new ImageIcon(newPicture));
+					picLabel.setBounds(0, 0, 1280, 720);
+					panelMainScreen.add(picLabel);
+					
+					panelMainScreen.repaint();
+					
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		btnEpg.addActionListener(new RunnableActionListener() {
@@ -199,10 +216,10 @@ public class Screen {
 
 		BufferedImage myPicture;
 		try {
-			myPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
+			myPicture = ImageIO.read(new File("src/television/zdf.jpg"));
 			myPicture = resize(myPicture, (int) (myPicture.getWidth() * 1.333333),
 					(int) (myPicture.getHeight() * 1.333333));
-			JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+			picLabel = new JLabel(new ImageIcon(myPicture));
 			picLabel.setBounds(0, 0, 1280, 720);
 			picLabel.setOpaque(true);
 			picLabel.setVisible(true);
@@ -293,5 +310,16 @@ public class Screen {
 
 	public void dispose() {
 		frame.dispose();
+	}
+	
+	public void changePicture(String channelPicturePath) throws IOException {
+		BufferedImage newPicture;
+		newPicture = ImageIO.read(new File(channelPicturePath));
+		panelMainScreen.remove(picLabel);
+		picLabel = new JLabel(new ImageIcon(newPicture));
+		picLabel.setBounds(0, 0, 1280, 720);
+		panelMainScreen.add(picLabel);
+		
+		panelMainScreen.repaint();
 	}
 }

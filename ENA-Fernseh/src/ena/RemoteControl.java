@@ -24,6 +24,7 @@ import javax.swing.event.ChangeEvent;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class RemoteControl {
 
@@ -35,6 +36,8 @@ public class RemoteControl {
 	private static RemoteControl window;
 	private TvElectronics electronics = null;
 	private boolean switchActive;
+
+	private ArrayList<Channel> channelList;
 
 	private JToggleButton btnRemotePiPSwitch;
 	private JButton btnRemotePiPActivate;
@@ -63,6 +66,7 @@ public class RemoteControl {
 	 * Create the application.
 	 */
 	public RemoteControl() {
+		channelList = Channel.exampleFill();
 		initialize();
 		updateButtonLayout();
 	}
@@ -179,16 +183,27 @@ public class RemoteControl {
 			tableRemoteStations.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					try {
+						// TODO nach schlieﬂen noch null?
 						if (screen != null) {
-							electronics.setChannel(String.valueOf(tableRemoteStations.getValueAt(
-									tableRemoteStations.getSelectedRow(), 0)), switchActive, String
-									.valueOf(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(), 1)),
-									screen);
-							// persistent.setProgramm(tableRemoteStations.getSelectedRow());
-							// System.out.println(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(),
-							// 1).toString());
-							screen.setLabel(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(), 1)
-									.toString());
+							if (screen.isVisible()) {
+								electronics.setChannel(
+										String.valueOf(tableRemoteStations.getValueAt(
+												tableRemoteStations.getSelectedRow(), 0)),
+										switchActive,
+										String
+												.valueOf(tableRemoteStations.getValueAt(
+														tableRemoteStations.getSelectedRow(), 1)),
+										screen);
+								screen.changePicture(channelList.get(tableRemoteStations.getSelectedRow())
+										.getChannelPicturePath());
+								// persistent.setProgramm(tableRemoteStations.getSelectedRow());
+								// System.out.println(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(),
+								// 1).toString());
+								screen.setLabel(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(), 1)
+										.toString());
+							}
+							else
+								System.out.println("Kein Fernseher vorhanden");
 						}
 						else
 							System.out.println("Kein Fernseher vorhanden");
@@ -200,14 +215,7 @@ public class RemoteControl {
 			tableRemoteStations.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			tableRemoteStations.setAutoCreateRowSorter(true);
 			tableRemoteStations.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			tableRemoteStations.setModel(new DefaultTableModel(new Object[][] { { "37a", "ARD" }, { "22a", "ZDF" },
-					{ "34a", "RTL" }, { "54d", "SAT1" }, { "54c", "Pro7" } }, new String[] { "Channel", "Name" }) {
-				boolean[] columnEditables = new boolean[] { false, false };
-
-				public boolean isCellEditable(int row, int column) {
-					return columnEditables[column];
-				}
-			});
+			tableRemoteStations.setModel(new ChannelTableModelList(channelList));
 			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 			centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 			tableRemoteStations.setRowSelectionInterval(0, 0);
