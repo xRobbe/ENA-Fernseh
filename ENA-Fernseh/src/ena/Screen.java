@@ -38,6 +38,7 @@ public class Screen {
 	private JPanel panelWelcome;
 	private JPanel panelMainScreen;
 	private JProgressBar progressBarScreenWelcome;
+	private JProgressBar progressBarTimeShift;
 	private TvElectronics electronics;
 	private Persistent persisten;
 	private JLabel picLabelMain;
@@ -89,7 +90,11 @@ public class Screen {
 		panelMainScreen.setBounds(0, 0, 1280, 720);
 		frame.getContentPane().add(panelMainScreen);
 		panelMainScreen.setLayout(null);
-
+		
+		progressBarTimeShift = new JProgressBar();
+		progressBarTimeShift.setBounds(320, 333, 640, 38);
+		
+		
 		panelScreenEPG = new JPanel();
 		panelScreenEPG.setBackground(new Color(164, 164, 164));
 		panelScreenEPG.setBounds(256, 720, 768, 128);
@@ -170,7 +175,6 @@ public class Screen {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
 			}
 		});
 		btnEpg.addActionListener(new RunnableActionListener() {
@@ -199,7 +203,14 @@ public class Screen {
 				}
 			}
 		});
-
+		
+		if (electronics == null) {
+			electronics = new TvElectronics(panelMainScreen, panelScreenPiP,
+					persisten, this);
+			System.out.println("TvElectronics wurde erstellt");
+		} else
+			System.out.println("TvElectronics ist schon vorhanden");
+		
 		BufferedImage myPicture;
 		try {
 			myPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
@@ -208,6 +219,8 @@ public class Screen {
 			picLabelMain.setOpaque(true);
 			picLabelMain.setVisible(true);
 			panelMainScreen.add(picLabelMain);
+			if((persisten.getRatio() == 1) || (persisten.getRatio() == 2))
+				electronics.setZoom(true);
 
 			myPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
 			myPicture = resize(myPicture, 384, 216);
@@ -218,14 +231,9 @@ public class Screen {
 			panelScreenPiP.add(picLabelPiP);
 		} catch (IOException e1) {
 			e1.printStackTrace();
+		} catch (Exception e3) {
+			e3.printStackTrace();
 		}
-
-		if (electronics == null) {
-			electronics = new TvElectronics(panelMainScreen, panelScreenPiP,
-					persisten);
-			System.out.println("TvElectronics wurde erstellt");
-		} else
-			System.out.println("TvElectronics ist schon vorhanden");
 
 		new Thread(new Runnable() {
 			@Override
@@ -335,6 +343,10 @@ public class Screen {
 	
 	public JLabel getMainLabel(){
 		return picLabelMain;
+	}
+	
+	public void setMainLabel(JLabel picLabelMain){
+		this.picLabelMain = picLabelMain;
 	}
 
 	public void changePicture(String channelPicturePath, boolean choosePiP)

@@ -159,18 +159,20 @@ public class RemoteControl {
 					.getResource("/picture/p_options.png")));
 			btnRemoteSettings.addActionListener(new RunnableActionListener() {
 				public void run() {
-					if (settings == null) {
-						settings = new Settings(window, persistent,
-								electronics, screen);
-						settings.setVisible(true);
-					} else {
-						if (settings.isVisible()) {
-							settings.setVisible(false);
-							settings.dispose();
-						} else {
+					if (screen != null) {
+						if (settings == null) {
 							settings = new Settings(window, persistent,
 									electronics, screen);
 							settings.setVisible(true);
+						} else {
+							if (settings.isVisible()) {
+								settings.setVisible(false);
+								settings.dispose();
+							} else {
+								settings = new Settings(window, persistent,
+										electronics, screen);
+								settings.setVisible(true);
+							}
 						}
 					}
 				}
@@ -203,6 +205,9 @@ public class RemoteControl {
 												tableRemoteStations
 														.getSelectedRow())
 												.getChannelPicturePath());
+								if ((persistent.getRatio() == 1)
+										|| (persistent.getRatio() == 1))
+									electronics.setZoom(true);
 								// screen.changePicture(channelList.get(
 								// tableRemoteStations.getSelectedRow())
 								// .getChannelPicturePath());

@@ -66,7 +66,10 @@ public class Settings {
 						persistent.setRatio(comboBoxSettingsAspectRatio
 								.getSelectedIndex());
 						remote.updateButtonLayout();
-						electronics.setZoom(true, screen);
+						if((persistent.getRatio() == 1) || (persistent.getRatio() == 2))
+							electronics.setZoom(true);
+						else
+							electronics.setZoom(false);
 						frmSettings.dispose();
 					} catch (Exception e3) {
 						e3.printStackTrace();

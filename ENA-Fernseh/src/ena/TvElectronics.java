@@ -38,6 +38,7 @@ public class TvElectronics {
 	private String channelPicPath = "src/television/dasErste.jpg";
 	private JPanel panelMainScreen;
 	private JLabel picLabelMain;
+	private Screen screen;
 
 	/**
 	 * Der Konstruktur übernimmt Referenzen auf die beiden JPanel-Objekte, die
@@ -48,12 +49,14 @@ public class TvElectronics {
 	 * @param pipDisplay
 	 *            dieses Panel repräsentiert das PictureInPicture-Display
 	 */
-	TvElectronics(JPanel mainDisplay, JPanel pipDisplay, Persistent persistent) {
+	TvElectronics(JPanel mainDisplay, JPanel pipDisplay, Persistent persistent,
+			Screen screen) {
 		this.mainDisplay = mainDisplay;
 		this.pipDisplay = pipDisplay;
 		this.isRecording = false;
 		this.recordingStartTime = 0;
 		this.persistent = persistent;
+		this.screen = screen;
 	}
 
 	/**
@@ -114,7 +117,8 @@ public class TvElectronics {
 		// im jeweiligen Display!
 		// Die meisten Bilder sollen im Format 16:9 sein, ein paar auch in 4:3
 		// und in 2,35:1
-		this.channelPicPath = channelList;
+		if (!(forPiP))
+			this.channelPicPath = channelList;
 		screen.setEpgLabel(channelName);
 		screen.changePicture(channelList, forPiP);
 
@@ -148,7 +152,7 @@ public class TvElectronics {
 	 * @param on
 	 *            true: Vergrößerung auf 133%; false: Normalgröße 100%
 	 */
-	public void setZoom(boolean on, Screen screen) {
+	public void setZoom(boolean on) {
 		System.out.println("Zoom = " + (on ? "133%" : "100%"));
 
 		// TO DO (Aufgabe 4): Vergrößern Sie hier das aktuelle Bild des
@@ -157,15 +161,25 @@ public class TvElectronics {
 		picLabelMain = screen.getMainLabel();
 		BufferedImage myPicture;
 		try {
-			myPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
-			myPicture = resize(myPicture,
-					(int) (myPicture.getWidth() * 1.333333),
-					(int) (myPicture.getHeight() * 1.333333));
-			panelMainScreen.remove(picLabelMain);
-			picLabelMain = new JLabel(new ImageIcon(myPicture));
-			picLabelMain.setBounds(0, 0, 1280, 720);
-			panelMainScreen.add(picLabelMain);
-			panelMainScreen.repaint();
+			if (on) {
+				myPicture = ImageIO.read(new File(channelPicPath));
+				myPicture = resize(myPicture,
+						(int) (myPicture.getWidth() * 1.333333),
+						(int) (myPicture.getHeight() * 1.333333));
+				panelMainScreen.remove(picLabelMain);
+				picLabelMain = new JLabel(new ImageIcon(myPicture));
+				picLabelMain.setBounds(0, 0, 1280, 720);
+				screen.setMainLabel(picLabelMain);
+				panelMainScreen.add(picLabelMain);
+				panelMainScreen.repaint();
+			} else {
+				panelMainScreen.remove(picLabelMain);
+				myPicture = ImageIO.read(new File(channelPicPath));
+				picLabelMain = new JLabel(new ImageIcon(myPicture));
+				picLabelMain.setBounds(0, 0, 1280, 720);
+				panelMainScreen.add(picLabelMain);
+				panelMainScreen.repaint();
+			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
