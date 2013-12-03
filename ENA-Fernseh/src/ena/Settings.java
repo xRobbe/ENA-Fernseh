@@ -19,10 +19,15 @@ public class Settings {
 	private JProgressBar progressBarSettingsStationScan;
 	private Persistent persistent;
 	private RemoteControl remote;
+	private TvElectronics electronics;
+	private Screen screen;
 
-	public Settings(RemoteControl remote, Persistent p) {
+	public Settings(RemoteControl remote, Persistent p,
+			TvElectronics electronics, Screen screen) {
 		this.remote = remote;
 		this.persistent = p;
+		this.electronics = electronics;
+		this.screen = screen;
 		initialize();
 	}
 
@@ -45,8 +50,9 @@ public class Settings {
 			comboBoxSettingsUsermode.setSelectedIndex(persistent.getUsermode());
 
 			final JComboBox<String> comboBoxSettingsAspectRatio = new JComboBox<String>();
-			comboBoxSettingsAspectRatio.setModel(new DefaultComboBoxModel<String>(
-					new String[] { "16 : 9", "4 : 3", "2.35 : 1" }));
+			comboBoxSettingsAspectRatio
+					.setModel(new DefaultComboBoxModel<String>(new String[] {
+							"16 : 9", "4 : 3", "2.35 : 1" }));
 			comboBoxSettingsAspectRatio.setBounds(212, 36, 90, 20);
 			frmSettings.getContentPane().add(comboBoxSettingsAspectRatio);
 			comboBoxSettingsAspectRatio.setSelectedIndex(persistent.getRatio());
@@ -55,9 +61,12 @@ public class Settings {
 			btnSettingsSave.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						persistent.setUsermode(comboBoxSettingsUsermode.getSelectedIndex());
-						persistent.setRatio(comboBoxSettingsAspectRatio.getSelectedIndex());
+						persistent.setUsermode(comboBoxSettingsUsermode
+								.getSelectedIndex());
+						persistent.setRatio(comboBoxSettingsAspectRatio
+								.getSelectedIndex());
 						remote.updateButtonLayout();
+						electronics.setZoom(true, screen);
 						frmSettings.dispose();
 					} catch (Exception e3) {
 						e3.printStackTrace();

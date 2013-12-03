@@ -305,11 +305,11 @@ public class Screen {
 		}
 	}
 
-	public void setLabel(String sName) {
+	public void setEpgLabel(String sName) {
 		lblEPG.setText(sName);
 	}
 
-	public JLabel getLabel() {
+	public JLabel getEpgLabel() {
 		return lblEPG;
 	}
 
@@ -327,6 +327,14 @@ public class Screen {
 
 	public JPanel getPanelScreenEPG() {
 		return panelScreenEPG;
+	}
+	
+	public JPanel getPanelMain(){
+		return panelMainScreen;
+	}
+	
+	public JLabel getMainLabel(){
+		return picLabelMain;
 	}
 
 	public void changePicture(String channelPicturePath, boolean choosePiP)

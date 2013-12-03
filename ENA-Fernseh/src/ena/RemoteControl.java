@@ -160,14 +160,16 @@ public class RemoteControl {
 			btnRemoteSettings.addActionListener(new RunnableActionListener() {
 				public void run() {
 					if (settings == null) {
-						settings = new Settings(window, persistent);
+						settings = new Settings(window, persistent,
+								electronics, screen);
 						settings.setVisible(true);
 					} else {
 						if (settings.isVisible()) {
 							settings.setVisible(false);
 							settings.dispose();
 						} else {
-							settings = new Settings(window, persistent);
+							settings = new Settings(window, persistent,
+									electronics, screen);
 							settings.setVisible(true);
 						}
 					}
@@ -201,17 +203,17 @@ public class RemoteControl {
 												tableRemoteStations
 														.getSelectedRow())
 												.getChannelPicturePath());
-								//screen.changePicture(channelList.get(
-								//		tableRemoteStations.getSelectedRow())
-								//		.getChannelPicturePath());
+								// screen.changePicture(channelList.get(
+								// tableRemoteStations.getSelectedRow())
+								// .getChannelPicturePath());
 								// persistent.setProgramm(tableRemoteStations.getSelectedRow());
 								// System.out.println(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(),
 								// 1).toString());
-								//screen.setLabel(tableRemoteStations
-								//		.getValueAt(
-								//				tableRemoteStations
-								//						.getSelectedRow(), 1)
-								//		.toString());
+								// screen.setLabel(tableRemoteStations
+								// .getValueAt(
+								// tableRemoteStations
+								// .getSelectedRow(), 1)
+								// .toString());
 							} else
 								System.out.println("Kein Fernseher vorhanden");
 						} else
@@ -264,7 +266,6 @@ public class RemoteControl {
 					btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(
 							RemoteControl.class
 									.getResource("/picture/p_play.png")));
-					electronics.setZoom(false, persistent);
 				}
 			});
 			btnRemoteTimeshiftPlayPause.setFocusPainted(false);
