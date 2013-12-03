@@ -41,6 +41,7 @@ public class Screen {
 	private TvElectronics electronics;
 	private Persistent persisten;
 	private JLabel picLabel;
+	private JPanel panelScreenPiP;
 
 	private JLabel lblEPG = new JLabel("Channel");
 
@@ -80,6 +81,28 @@ public class Screen {
 		lblScreenWelcomeStatus.setBounds(320, 223, 640, 63);
 		panelWelcome.add(lblScreenWelcomeStatus);
 
+		JButton btnScreenWelcomeDebugDone = new JButton("Done");
+		btnScreenWelcomeDebugDone
+				.addActionListener(new RunnableActionListener() {
+					public void run() {
+						while (progressBarScreenWelcome.getValue() < progressBarScreenWelcome
+								.getMaximum()) {
+							progressBarScreenWelcome
+									.setValue(progressBarScreenWelcome
+											.getValue() + 1);
+							try {
+								Thread.sleep(30);
+							} catch (InterruptedException ie) {
+								ie.printStackTrace();
+							}
+						}
+						panelWelcome.setVisible(false);
+						panelMainScreen.setVisible(true);
+					}
+				});
+		btnScreenWelcomeDebugDone.setBounds(575, 437, 89, 23);
+		panelWelcome.add(btnScreenWelcomeDebugDone);
+
 		panelMainScreen = new JPanel();
 		panelMainScreen.setVisible(false);
 		panelMainScreen.setBackground(new Color(0, 0, 0));
@@ -98,7 +121,7 @@ public class Screen {
 		lblEPG.setFont(new Font("Tahoma", Font.BOLD, 40));
 		lblEPG.setHorizontalAlignment(SwingConstants.CENTER);
 
-		final JPanel panelScreenPiP = new JPanel();
+		panelScreenPiP = new JPanel();
 		panelScreenPiP.setBounds(886, 11, 384, 216);
 		panelMainScreen.add(panelScreenPiP);
 		panelScreenPiP.setVisible(false);
@@ -154,7 +177,8 @@ public class Screen {
 
 				try {
 					BufferedImage newPicture;
-					newPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
+					newPicture = ImageIO.read(new File(
+							"src/television/dasErste.jpg"));
 					panelMainScreen.remove(picLabel);
 					picLabel = new JLabel(new ImageIcon(newPicture));
 					picLabel.setBounds(0, 0, 1280, 720);
@@ -199,7 +223,8 @@ public class Screen {
 		BufferedImage myPicture;
 		try {
 			myPicture = ImageIO.read(new File("src/television/zdf.jpg"));
-			myPicture = resize(myPicture, (int) (myPicture.getWidth() * 1.333333),
+			myPicture = resize(myPicture,
+					(int) (myPicture.getWidth() * 1.333333),
 					(int) (myPicture.getHeight() * 1.333333));
 			picLabel = new JLabel(new ImageIcon(myPicture));
 			picLabel.setBounds(0, 0, 1280, 720);
@@ -211,29 +236,11 @@ public class Screen {
 		}
 
 		if (electronics == null) {
-			electronics = new TvElectronics(panelMainScreen, panelScreenPiP, persisten);
+			electronics = new TvElectronics(panelMainScreen, panelScreenPiP,
+					persisten);
 			System.out.println("TvElectronics wurde erstellt");
-		}
-		else
+		} else
 			System.out.println("TvElectronics ist schon vorhanden");
-		
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (progressBarScreenWelcome.getValue() < progressBarScreenWelcome.getMaximum()) {
-					progressBarScreenWelcome.setValue(progressBarScreenWelcome.getValue() + 1);
-					try {
-						Thread.sleep(30);
-					} catch (InterruptedException ie) {
-						ie.printStackTrace();
-					}
-				}
-				panelWelcome.setVisible(false);
-				panelMainScreen.setVisible(true);
-				
-			}
-		}).start();
-		
 	}
 
 	public BufferedImage resize(BufferedImage img, int newW, int newH) {
@@ -241,7 +248,8 @@ public class Screen {
 		int h = img.getHeight();
 		BufferedImage dimg = new BufferedImage(newW, newH, img.getType());
 		Graphics2D g = dimg.createGraphics();
-		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		g.drawImage(img, 0, 0, newW, newH, 0, 0, w, h, null);
 		g.dispose();
 		return dimg;
@@ -312,14 +320,24 @@ public class Screen {
 		frame.dispose();
 	}
 
-	public void changePicture(String channelPicturePath) throws IOException {
+	public void changePicture(String channelPicturePath, boolean choosePiP)
+			throws IOException {
 		BufferedImage newPicture;
 		newPicture = ImageIO.read(new File(channelPicturePath));
-		panelMainScreen.remove(picLabel);
-		picLabel = new JLabel(new ImageIcon(newPicture));
-		picLabel.setBounds(0, 0, 1280, 720);
-		panelMainScreen.add(picLabel);
-
-		panelMainScreen.repaint();
+		if (!(choosePiP)) {
+			panelMainScreen.remove(picLabel);
+			picLabel = new JLabel(new ImageIcon(newPicture));
+			picLabel.setBounds(0, 0, 1280, 720);
+			panelMainScreen.add(picLabel);
+			panelMainScreen.repaint();
+		}
+		else{
+			resize(newPicture, 384, 216);
+			panelScreenPiP.remove(picLabel);
+			picLabel = new JLabel(new ImageIcon(newPicture));
+			picLabel.setBounds(0, 0, 1280, 720);
+			panelScreenPiP.add(picLabel);
+			panelScreenPiP.repaint();
+		}
 	}
 }
