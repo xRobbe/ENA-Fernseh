@@ -137,6 +137,8 @@ public class RemoteControl {
 					else {
 						if (btnRemotePiPSwitch.isEnabled()) {
 							btnRemotePiPSwitch.setEnabled(false);
+							btnRemotePiPSwitch.setSelected(false);
+							switchActive = false;
 							electronics.setPictureInPicture(false);
 						} else {
 							btnRemotePiPSwitch.setEnabled(true);
@@ -205,11 +207,11 @@ public class RemoteControl {
 								// persistent.setProgramm(tableRemoteStations.getSelectedRow());
 								// System.out.println(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(),
 								// 1).toString());
-								screen.setLabel(tableRemoteStations
-										.getValueAt(
-												tableRemoteStations
-														.getSelectedRow(), 1)
-										.toString());
+								//screen.setLabel(tableRemoteStations
+								//		.getValueAt(
+								//				tableRemoteStations
+								//						.getSelectedRow(), 1)
+								//		.toString());
 							} else
 								System.out.println("Kein Fernseher vorhanden");
 						} else

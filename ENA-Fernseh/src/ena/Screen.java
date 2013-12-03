@@ -40,10 +40,12 @@ public class Screen {
 	private JProgressBar progressBarScreenWelcome;
 	private TvElectronics electronics;
 	private Persistent persisten;
-	private JLabel picLabel;
+	private JLabel picLabelMain;
+	private JLabel picLabelPiP;
 	private JPanel panelScreenPiP;
 
-	private JLabel lblEPG = new JLabel("Channel");
+	private JLabel lblEPG = new JLabel("Das Erste");
+	private JPanel panelScreenEPG;
 
 	public Screen(Persistent persistent) {
 		this.persisten = persistent;
@@ -81,28 +83,6 @@ public class Screen {
 		lblScreenWelcomeStatus.setBounds(320, 223, 640, 63);
 		panelWelcome.add(lblScreenWelcomeStatus);
 
-		JButton btnScreenWelcomeDebugDone = new JButton("Done");
-		btnScreenWelcomeDebugDone
-				.addActionListener(new RunnableActionListener() {
-					public void run() {
-						while (progressBarScreenWelcome.getValue() < progressBarScreenWelcome
-								.getMaximum()) {
-							progressBarScreenWelcome
-									.setValue(progressBarScreenWelcome
-											.getValue() + 1);
-							try {
-								Thread.sleep(30);
-							} catch (InterruptedException ie) {
-								ie.printStackTrace();
-							}
-						}
-						panelWelcome.setVisible(false);
-						panelMainScreen.setVisible(true);
-					}
-				});
-		btnScreenWelcomeDebugDone.setBounds(575, 437, 89, 23);
-		panelWelcome.add(btnScreenWelcomeDebugDone);
-
 		panelMainScreen = new JPanel();
 		panelMainScreen.setVisible(false);
 		panelMainScreen.setBackground(new Color(0, 0, 0));
@@ -110,7 +90,7 @@ public class Screen {
 		frame.getContentPane().add(panelMainScreen);
 		panelMainScreen.setLayout(null);
 
-		final JPanel panelScreenEPG = new JPanel();
+		panelScreenEPG = new JPanel();
 		panelScreenEPG.setBackground(new Color(164, 164, 164));
 		panelScreenEPG.setBounds(256, 720, 768, 128);
 		panelMainScreen.add(panelScreenEPG);
@@ -179,10 +159,10 @@ public class Screen {
 					BufferedImage newPicture;
 					newPicture = ImageIO.read(new File(
 							"src/television/dasErste.jpg"));
-					panelMainScreen.remove(picLabel);
-					picLabel = new JLabel(new ImageIcon(newPicture));
-					picLabel.setBounds(0, 0, 1280, 720);
-					panelMainScreen.add(picLabel);
+					panelMainScreen.remove(picLabelMain);
+					picLabelMain = new JLabel(new ImageIcon(newPicture));
+					picLabelMain.setBounds(0, 0, 1280, 720);
+					panelMainScreen.add(picLabelMain);
 
 					panelMainScreen.repaint();
 
@@ -222,15 +202,20 @@ public class Screen {
 
 		BufferedImage myPicture;
 		try {
-			myPicture = ImageIO.read(new File("src/television/zdf.jpg"));
-			myPicture = resize(myPicture,
-					(int) (myPicture.getWidth() * 1.333333),
-					(int) (myPicture.getHeight() * 1.333333));
-			picLabel = new JLabel(new ImageIcon(myPicture));
-			picLabel.setBounds(0, 0, 1280, 720);
-			picLabel.setOpaque(true);
-			picLabel.setVisible(true);
-			panelMainScreen.add(picLabel);
+			myPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
+			picLabelMain = new JLabel(new ImageIcon(myPicture));
+			picLabelMain.setBounds(0, 0, 1280, 720);
+			picLabelMain.setOpaque(true);
+			picLabelMain.setVisible(true);
+			panelMainScreen.add(picLabelMain);
+
+			myPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
+			myPicture = resize(myPicture, 384, 216);
+			picLabelPiP = new JLabel(new ImageIcon(myPicture));
+			picLabelPiP.setBounds(0, 0, 384, 216);
+			picLabelPiP.setOpaque(true);
+			picLabelPiP.setVisible(true);
+			panelScreenPiP.add(picLabelPiP);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -241,6 +226,26 @@ public class Screen {
 			System.out.println("TvElectronics wurde erstellt");
 		} else
 			System.out.println("TvElectronics ist schon vorhanden");
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (progressBarScreenWelcome.getValue() < progressBarScreenWelcome
+						.getMaximum()) {
+					progressBarScreenWelcome.setValue(progressBarScreenWelcome
+							.getValue() + 1);
+					try {
+						Thread.sleep(30);
+					} catch (InterruptedException ie) {
+						ie.printStackTrace();
+					}
+				}
+				panelWelcome.setVisible(false);
+				panelMainScreen.setVisible(true);
+
+			}
+		}).start();
+
 	}
 
 	public BufferedImage resize(BufferedImage img, int newW, int newH) {
@@ -259,7 +264,7 @@ public class Screen {
 		return electronics;
 	}
 
-	private void scrollPanelY(JComponent panel, int max, int min)
+	public void scrollPanelY(JComponent panel, int max, int min)
 			throws InterruptedException {
 		int time = 300 / Math.abs(max - min);
 		if (panel.getBounds().y == max) {
@@ -320,23 +325,26 @@ public class Screen {
 		frame.dispose();
 	}
 
+	public JPanel getPanelScreenEPG() {
+		return panelScreenEPG;
+	}
+
 	public void changePicture(String channelPicturePath, boolean choosePiP)
 			throws IOException {
 		BufferedImage newPicture;
 		newPicture = ImageIO.read(new File(channelPicturePath));
 		if (!(choosePiP)) {
-			panelMainScreen.remove(picLabel);
-			picLabel = new JLabel(new ImageIcon(newPicture));
-			picLabel.setBounds(0, 0, 1280, 720);
-			panelMainScreen.add(picLabel);
+			panelMainScreen.remove(picLabelMain);
+			picLabelMain = new JLabel(new ImageIcon(newPicture));
+			picLabelMain.setBounds(0, 0, 1280, 720);
+			panelMainScreen.add(picLabelMain);
 			panelMainScreen.repaint();
-		}
-		else{
-			resize(newPicture, 384, 216);
-			panelScreenPiP.remove(picLabel);
-			picLabel = new JLabel(new ImageIcon(newPicture));
-			picLabel.setBounds(0, 0, 1280, 720);
-			panelScreenPiP.add(picLabel);
+		} else {
+			newPicture = resize(newPicture, 384, 216);
+			panelScreenPiP.remove(picLabelPiP);
+			picLabelPiP = new JLabel(new ImageIcon(newPicture));
+			picLabelPiP.setBounds(0, 0, 384, 216);
+			panelScreenPiP.add(picLabelPiP);
 			panelScreenPiP.repaint();
 		}
 	}

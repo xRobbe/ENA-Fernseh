@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 
 
 
+
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -78,7 +79,7 @@ public class TvElectronics {
         }
         
         /**
-         * Wählt einen Kanal für die Wiedergabe aus.
+         * Waehlt einen Kanal fuer die Wiedergabe aus.
          * 
          * @param channel       Kanalnummer als Zahl im Bereich 1..99 gefolgt von einem Buchstaben a..d (vgl. Kanalscan.csv)
          * @param forPiP        true: Wiedergabe im PictureInPicture-Display; false: Wiedergabe im Haupt-Display
@@ -107,9 +108,9 @@ public class TvElectronics {
         }
         
         /**
-         * Stellt die Lautstärke des Fernsehers ein.
+         * Stellt die Lautstaerke des Fernsehers ein.
          * 
-         * @param volume        Einstellwert für die Lautstärke im Bereich 0..100 (0 = aus, 100 = volle Lautstärke)
+         * @param volume        Einstellwert fuer die Lautstaerke im Bereich 0..100 (0 = aus, 100 = volle Lautstärke)
          * @throws Exception    wenn der Wert von "volume" außerhalb des zulässigen Bereichs ist
          */
         public void setVolume(int volume, JSlider slider) throws Exception {
