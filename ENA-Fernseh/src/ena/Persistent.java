@@ -6,106 +6,106 @@ import java.io.FileOutputStream;
 import java.util.Properties;
 
 public class Persistent {
-        private final static String Filepath = "config.properties";
-        private final static String STATION = "Station";
-        private final static String VOLUME = "Volume";
-        private final static String RATIO = "Ratio";
-        private final static String USERMODE = "Usermode";
-        private final static int MAX_VOLUME = 100;
-        private final static int MAX_USERMODE = 2;
-        private final static int MAX_RATIO = 2;
-        
-        private Properties properties = new Properties();
-        private String config = Filepath;
-        private FileInputStream in;
+	private final static String Filepath = "config.properties";
+	private final static String STATION = "Station";
+	private final static String VOLUME = "Volume";
+	private final static String RATIO = "Ratio";
+	private final static String USERMODE = "Usermode";
+	private final static int MAX_VOLUME = 100;
+	private final static int MAX_USERMODE = 2;
+	private final static int MAX_RATIO = 2;
 
-        public Persistent() {
-                try {
-                        if (!((new File(Filepath)).exists()))
-                                new FileOutputStream(config);
+	private Properties properties = new Properties();
+	private String config = Filepath;
+	private FileInputStream in;
 
-                        in = new FileInputStream(config);
-                        properties.load(in);
+	public Persistent() {
+		try {
+			if (!((new File(Filepath)).exists()))
+				new FileOutputStream(config);
 
-                        if (!(checkConfig())) {
-                                properties.setProperty(VOLUME, "50");
-                                properties.setProperty(STATION, "1");
-                                properties.setProperty(USERMODE, "0");
-                                properties.setProperty(RATIO, "0");
-                                properties.store(out(), null);
-                        }
-                } catch (Exception e) {
-                        e.printStackTrace();
-                }
-        }
+			in = new FileInputStream(config);
+			properties.load(in);
 
-        public void setVolume(int volume) throws Exception {
-                properties.setProperty(VOLUME, String.valueOf(volume));
-                properties.store(out(), null);
-        }
+			if (!(checkConfig())) {
+				properties.setProperty(VOLUME, "50");
+				properties.setProperty(STATION, "1");
+				properties.setProperty(USERMODE, "0");
+				properties.setProperty(RATIO, "0");
+				properties.store(out(), null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-        public int getVolume() throws Exception {
-                return Integer.parseInt(properties.getProperty(VOLUME));
-        }
+	public void setVolume(int volume) throws Exception {
+		properties.setProperty(VOLUME, String.valueOf(volume));
+		properties.store(out(), null);
+	}
 
-        public void setProgramm(int programm) throws Exception {
-                properties.setProperty(STATION, String.valueOf(programm));
-                properties.store(out(), null);
-        }
+	public int getVolume() throws Exception {
+		return Integer.parseInt(properties.getProperty(VOLUME));
+	}
 
-        public int getProgramm() throws Exception {
-                return Integer.parseInt(properties.getProperty(STATION));
-        }
+	public void setProgramm(int programm) throws Exception {
+		properties.setProperty(STATION, String.valueOf(programm));
+		properties.store(out(), null);
+	}
 
-        public void setUsermode(int usermode) throws Exception {
-                properties.setProperty(USERMODE, String.valueOf(usermode));
-                properties.store(out(), null);
-        }
+	public int getProgramm() throws Exception {
+		return Integer.parseInt(properties.getProperty(STATION));
+	}
 
-        public int getUsermode() throws Exception {
-                return Integer.parseInt(properties.getProperty(USERMODE));
-        }
+	public void setUsermode(int usermode) throws Exception {
+		properties.setProperty(USERMODE, String.valueOf(usermode));
+		properties.store(out(), null);
+	}
 
-        public void setRatio(int ratio) throws Exception {
-                properties.setProperty(RATIO, String.valueOf(ratio));
-                properties.store(out(), null);
-        }
+	public int getUsermode() throws Exception {
+		return Integer.parseInt(properties.getProperty(USERMODE));
+	}
 
-        public int getRatio() throws Exception {
-                return Integer.parseInt(properties.getProperty(RATIO));
-        }
+	public void setRatio(int ratio) throws Exception {
+		properties.setProperty(RATIO, String.valueOf(ratio));
+		properties.store(out(), null);
+	}
 
-        private boolean checkConfig() {
-                if (!(properties.containsKey(VOLUME)))
-                        return false;
-                if (Integer.parseInt(properties.getProperty(VOLUME)) > MAX_VOLUME)
-                        return false;
-                if (Integer.parseInt(properties.getProperty(VOLUME)) < 0)
-                        return false;
+	public int getRatio() throws Exception {
+		return Integer.parseInt(properties.getProperty(RATIO));
+	}
 
-                if (!(properties.containsKey(STATION)))
-                        return false;
-                if (Integer.parseInt(properties.getProperty(STATION)) < 0)
-                        return false;
+	private boolean checkConfig() {
+		if (!(properties.containsKey(VOLUME)))
+			return false;
+		if (Integer.parseInt(properties.getProperty(VOLUME)) > MAX_VOLUME)
+			return false;
+		if (Integer.parseInt(properties.getProperty(VOLUME)) < 0)
+			return false;
 
-                if (!(properties.containsKey(USERMODE)))
-                        return false;
-                if (Integer.parseInt(properties.getProperty(USERMODE)) > MAX_USERMODE)
-                        return false;
-                if (Integer.parseInt(properties.getProperty(USERMODE)) < 0)
-                        return false;
+		if (!(properties.containsKey(STATION)))
+			return false;
+		if (Integer.parseInt(properties.getProperty(STATION)) < 0)
+			return false;
 
-                if (!(properties.containsKey(RATIO)))
-                        return false;
-                if (Integer.parseInt(properties.getProperty(RATIO)) > MAX_RATIO)
-                        return false;
-                if (Integer.parseInt(properties.getProperty(RATIO)) < 0)
-                        return false;
-                
-                return true;
-        }
+		if (!(properties.containsKey(USERMODE)))
+			return false;
+		if (Integer.parseInt(properties.getProperty(USERMODE)) > MAX_USERMODE)
+			return false;
+		if (Integer.parseInt(properties.getProperty(USERMODE)) < 0)
+			return false;
 
-        private FileOutputStream out() throws Exception {
-                return new FileOutputStream(config);
-        }
+		if (!(properties.containsKey(RATIO)))
+			return false;
+		if (Integer.parseInt(properties.getProperty(RATIO)) > MAX_RATIO)
+			return false;
+		if (Integer.parseInt(properties.getProperty(RATIO)) < 0)
+			return false;
+
+		return true;
+	}
+
+	private FileOutputStream out() throws Exception {
+		return new FileOutputStream(config);
+	}
 }

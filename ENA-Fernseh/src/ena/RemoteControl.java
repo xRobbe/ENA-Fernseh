@@ -27,334 +27,342 @@ import java.awt.event.MouseEvent;
 
 public class RemoteControl {
 
-        private JFrame frame;
-        private Screen screen;
-        private Settings settings;
-        private JTable tableRemoteStations;
-        private Persistent persistent;
-        private static RemoteControl window;
-        private TvElectronics electronics = null;
-        private boolean switchActive;
+	private JFrame frame;
+	private Screen screen;
+	private Settings settings;
+	private JTable tableRemoteStations;
+	private Persistent persistent;
+	private static RemoteControl window;
+	private TvElectronics electronics = null;
+	private boolean switchActive;
 
-        private JToggleButton btnRemotePiPSwitch;
-        private JButton btnRemotePiPActivate;
-        private JButton btnRemoteTimeshiftStop;
-        private JButton btnRemoteTimeshiftPlayPause;
-        private JButton btnRemoteTimeshiftForwards;
+	private JToggleButton btnRemotePiPSwitch;
+	private JButton btnRemotePiPActivate;
+	private JButton btnRemoteTimeshiftStop;
+	private JButton btnRemoteTimeshiftPlayPause;
+	private JButton btnRemoteTimeshiftForwards;
 
-        /**
-         * Launch the application.
-         */
+	/**
+	 * Launch the application.
+	 */
 
-        public static void main(String[] args) {
-                EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                                try {
-                                        window = new RemoteControl();
-                                        window.frame.setVisible(true);
-                                } catch (Exception e) {
-                                        e.printStackTrace();
-                                }
-                        }
-                });
-        }
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					window = new RemoteControl();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
-        /**
-         * Create the application.
-         */
-        public RemoteControl() {
-                initialize();
-                updateButtonLayout();
-        }
+	/**
+	 * Create the application.
+	 */
+	public RemoteControl() {
+		initialize();
+		updateButtonLayout();
+	}
 
-        /**
-         * Initialize the contents of the frame.
-         */
+	/**
+	 * Initialize the contents of the frame.
+	 */
 
-        private void initialize() {
-                try {
-                        persistent = new Persistent();
+	private void initialize() {
+		try {
+			persistent = new Persistent();
 
-                        frame = new JFrame();
-                        frame.setResizable(false);
-                        frame.setBounds(100, 100, 366, 666);
-                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                        frame.getContentPane().setLayout(null);
+			frame = new JFrame();
+			frame.setResizable(false);
+			frame.setBounds(100, 100, 366, 666);
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.getContentPane().setLayout(null);
 
-                        JPanel panelRemoteControl = new JPanel();
-                        panelRemoteControl.setBounds(0, 0, 360, 640);
-                        frame.getContentPane().add(panelRemoteControl);
-                        panelRemoteControl.setLayout(null);
+			JPanel panelRemoteControl = new JPanel();
+			panelRemoteControl.setBounds(0, 0, 360, 640);
+			frame.getContentPane().add(panelRemoteControl);
+			panelRemoteControl.setLayout(null);
 
-                        JButton btnRemotePower = new JButton();
-                        btnRemotePower.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_OnOff.png")));
-                        btnRemotePower.addActionListener(new RunnableActionListener() {
-                                public void run() {
-                                        if (screen == null) {
-                                                screen = new Screen(persistent);
-                                                screen.setVisible(true);
-                                                electronics = screen.getElectronics();
-                                        } else {
-                                                if (screen.isVisible()) {
-                                                        screen.setVisible(false);
-                                                        screen.dispose();
-                                                } else {
-                                                        screen = new Screen(persistent);
-                                                        screen.setVisible(true);
-                                                }
-                                        }
-                                }
-                        });
-                        btnRemotePower.setFocusPainted(false);
-                        btnRemotePower.setToolTipText("Turn Screen On/Off");
-                        btnRemotePower.setBounds(271, 10, 77, 77);
-                        panelRemoteControl.add(btnRemotePower);
-                        
+			JButton btnRemotePower = new JButton();
+			btnRemotePower.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_OnOff.png")));
+			btnRemotePower.addActionListener(new RunnableActionListener() {
+				public void run() {
+					if (screen == null) {
+						screen = new Screen(persistent);
+						screen.setVisible(true);
+						electronics = screen.getElectronics();
+					} else {
+						if (screen.isVisible()) {
+							screen.setVisible(false);
+							screen.dispose();
+						} else {
+							screen = new Screen(persistent);
+							screen.setVisible(true);
+						}
+					}
+				}
+			});
+			btnRemotePower.setFocusPainted(false);
+			btnRemotePower.setToolTipText("Turn Screen On/Off");
+			btnRemotePower.setBounds(271, 10, 77, 77);
+			panelRemoteControl.add(btnRemotePower);
 
-                        btnRemotePiPSwitch = new JToggleButton();
-                        btnRemotePiPSwitch.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_PiPch.png")));
-                        btnRemotePiPSwitch.addActionListener(new ActionListener() {
-                                public void actionPerformed(ActionEvent e) {
-                                	if(btnRemotePiPSwitch.isSelected())
-                                		switchActive = true;
-                                	else
-                                		switchActive = false;
-                                }
-                        });
-                        btnRemotePiPSwitch.setFocusPainted(false);
-                        btnRemotePiPSwitch.setToolTipText("Switch Picture in Picture Screen");
-                        btnRemotePiPSwitch.setBounds(184, 10, 77, 77);
-                        panelRemoteControl.add(btnRemotePiPSwitch);
+			btnRemotePiPSwitch = new JToggleButton();
+			btnRemotePiPSwitch.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_PiPch.png")));
+			btnRemotePiPSwitch.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (btnRemotePiPSwitch.isSelected())
+						switchActive = true;
+					else
+						switchActive = false;
+				}
+			});
+			btnRemotePiPSwitch.setFocusPainted(false);
+			btnRemotePiPSwitch.setToolTipText("Switch Picture in Picture Screen");
+			btnRemotePiPSwitch.setBounds(184, 10, 77, 77);
+			panelRemoteControl.add(btnRemotePiPSwitch);
 
-                        btnRemotePiPActivate = new JButton();
-                        btnRemotePiPActivate.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_PiP.png")));
-                        btnRemotePiPActivate.addActionListener(new ActionListener() {
-                                public void actionPerformed(ActionEvent e) {
-                                        if(electronics == null)
-                                                System.out.println("Kein screen vorhanden");
-                                        else{
-                                        if (btnRemotePiPSwitch.isEnabled()){
-                                                btnRemotePiPSwitch.setEnabled(false);
-                                                electronics.setPictureInPicture(false);
-                                        }else{
-                                                btnRemotePiPSwitch.setEnabled(true);
-                                                electronics.setPictureInPicture(true);
-                                        }
-                                }}
-                        });
-                        btnRemotePiPActivate.setFocusPainted(false);
-                        btnRemotePiPActivate.setToolTipText("Picture in Picture");
-                        btnRemotePiPActivate.setBounds(97, 10, 77, 77);
-                        panelRemoteControl.add(btnRemotePiPActivate);
+			btnRemotePiPActivate = new JButton();
+			btnRemotePiPActivate.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_PiP.png")));
+			btnRemotePiPActivate.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (electronics == null)
+						System.out.println("Kein screen vorhanden");
+					else {
+						if (btnRemotePiPSwitch.isEnabled()) {
+							btnRemotePiPSwitch.setEnabled(false);
+							electronics.setPictureInPicture(false);
+						} else {
+							btnRemotePiPSwitch.setEnabled(true);
+							electronics.setPictureInPicture(true);
+						}
+					}
+				}
+			});
+			btnRemotePiPActivate.setFocusPainted(false);
+			btnRemotePiPActivate.setToolTipText("Picture in Picture");
+			btnRemotePiPActivate.setBounds(97, 10, 77, 77);
+			panelRemoteControl.add(btnRemotePiPActivate);
 
-                        JButton btnRemoteSettings = new JButton();
-                        btnRemoteSettings.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_options.png")));
-                        btnRemoteSettings.setSelectedIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_options.png")));
-                        btnRemoteSettings.addActionListener(new RunnableActionListener() {
-                                public void run() {
-                                        if (settings == null) {
-                                                settings = new Settings(window, persistent);
-                                                settings.setVisible(true);
-                                        } else {
-                                                if (settings.isVisible()) {
-                                                        settings.setVisible(false);
-                                                        settings.dispose();
-                                                } else {
-                                                        settings = new Settings(window, persistent);
-                                                        settings.setVisible(true);
-                                                }
-                                        }
-                                }
-                        });
-                        btnRemoteSettings.setFocusPainted(false);
-                        btnRemoteSettings.setToolTipText("Settings");
-                        btnRemoteSettings.setBounds(10, 10, 77, 77);
-                        panelRemoteControl.add(btnRemoteSettings);
+			JButton btnRemoteSettings = new JButton();
+			btnRemoteSettings.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_options.png")));
+			btnRemoteSettings.setSelectedIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_options.png")));
+			btnRemoteSettings.addActionListener(new RunnableActionListener() {
+				public void run() {
+					if (settings == null) {
+						settings = new Settings(window, persistent);
+						settings.setVisible(true);
+					} else {
+						if (settings.isVisible()) {
+							settings.setVisible(false);
+							settings.dispose();
+						} else {
+							settings = new Settings(window, persistent);
+							settings.setVisible(true);
+						}
+					}
+				}
+			});
+			btnRemoteSettings.setFocusPainted(false);
+			btnRemoteSettings.setToolTipText("Settings");
+			btnRemoteSettings.setBounds(10, 10, 77, 77);
+			panelRemoteControl.add(btnRemoteSettings);
 
-                        JScrollPane scrollPaneRemoteStations = new JScrollPane();
-                        scrollPaneRemoteStations.setBounds(10, 98, 338, 408);
-                        panelRemoteControl.add(scrollPaneRemoteStations);
+			JScrollPane scrollPaneRemoteStations = new JScrollPane();
+			scrollPaneRemoteStations.setBounds(10, 98, 338, 408);
+			panelRemoteControl.add(scrollPaneRemoteStations);
 
-                        tableRemoteStations = new JTable();
-                        tableRemoteStations.addMouseListener(new MouseAdapter() {
-                                public void mouseClicked(MouseEvent e) {
-                                        try {
-                                        	if(screen != null){
-                                        		electronics.setChannel(String.valueOf(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(), 0)), switchActive, String.valueOf(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(),1)), screen);
-                                                //persistent.setProgramm(tableRemoteStations.getSelectedRow());
-                                                //System.out.println(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(), 1).toString());
-                                                screen.setLabel(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(), 1).toString());
-                                        	}
-                                        	else
-                                        		System.out.println("Kein Fernseher vorhanden");
-                                        } catch (Exception e4) {
-                                                e4.printStackTrace();
-                                        }
-                                }
-                        });
-                        tableRemoteStations.setFont(new Font("Tahoma", Font.PLAIN, 15));
-                        tableRemoteStations.setAutoCreateRowSorter(true);
-                        tableRemoteStations.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-                        tableRemoteStations.setModel(new DefaultTableModel(new Object[][] { { "37a", "ARD" }, { "22a", "ZDF" },
-                                        { "34a", "RTL" }, { "54d", "SAT1" }, { "54c", "Pro7" } }, new String[] { "Channel", "Name" }) {
-                                boolean[] columnEditables = new boolean[] { false, false };
+			tableRemoteStations = new JTable();
+			tableRemoteStations.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					try {
+						if (screen != null) {
+							electronics.setChannel(String.valueOf(tableRemoteStations.getValueAt(
+									tableRemoteStations.getSelectedRow(), 0)), switchActive, String
+									.valueOf(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(), 1)),
+									screen);
+							// persistent.setProgramm(tableRemoteStations.getSelectedRow());
+							// System.out.println(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(),
+							// 1).toString());
+							screen.setLabel(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(), 1)
+									.toString());
+						}
+						else
+							System.out.println("Kein Fernseher vorhanden");
+					} catch (Exception e4) {
+						e4.printStackTrace();
+					}
+				}
+			});
+			tableRemoteStations.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			tableRemoteStations.setAutoCreateRowSorter(true);
+			tableRemoteStations.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			tableRemoteStations.setModel(new DefaultTableModel(new Object[][] { { "37a", "ARD" }, { "22a", "ZDF" },
+					{ "34a", "RTL" }, { "54d", "SAT1" }, { "54c", "Pro7" } }, new String[] { "Channel", "Name" }) {
+				boolean[] columnEditables = new boolean[] { false, false };
 
-                                public boolean isCellEditable(int row, int column) {
-                                        return columnEditables[column];
-                                }
-                        });
-                        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-                        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-                        tableRemoteStations.setRowSelectionInterval(0, 0);
-                        tableRemoteStations.getColumnModel().getColumn(0).setPreferredWidth(70);
-                        tableRemoteStations.getColumnModel().getColumn(0).setMinWidth(70);
-                        tableRemoteStations.getColumnModel().getColumn(0).setMaxWidth(70);
-                        tableRemoteStations.setRowHeight(31);
-                        tableRemoteStations.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-                        tableRemoteStations.getColumnModel().getColumn(1).setPreferredWidth(250);
-                        tableRemoteStations.getColumnModel().getColumn(1).setMinWidth(200);
-                        scrollPaneRemoteStations.setViewportView(tableRemoteStations);
+				public boolean isCellEditable(int row, int column) {
+					return columnEditables[column];
+				}
+			});
+			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+			centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+			tableRemoteStations.setRowSelectionInterval(0, 0);
+			tableRemoteStations.getColumnModel().getColumn(0).setPreferredWidth(70);
+			tableRemoteStations.getColumnModel().getColumn(0).setMinWidth(70);
+			tableRemoteStations.getColumnModel().getColumn(0).setMaxWidth(70);
+			tableRemoteStations.setRowHeight(31);
+			tableRemoteStations.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+			tableRemoteStations.getColumnModel().getColumn(1).setPreferredWidth(250);
+			tableRemoteStations.getColumnModel().getColumn(1).setMinWidth(200);
+			scrollPaneRemoteStations.setViewportView(tableRemoteStations);
 
-                        btnRemoteTimeshiftStop = new JButton();
-                        btnRemoteTimeshiftStop.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_stop.png")));
-                        btnRemoteTimeshiftStop.addActionListener(new ActionListener() {
-                                public void actionPerformed(ActionEvent e) {
-                                }
-                        });
-                        btnRemoteTimeshiftStop.setFocusPainted(false);
-                        btnRemoteTimeshiftStop.setToolTipText("Stop Timeshift");
-                        btnRemoteTimeshiftStop.setBounds(10, 552, 77, 77);
-                        panelRemoteControl.add(btnRemoteTimeshiftStop);
+			btnRemoteTimeshiftStop = new JButton();
+			btnRemoteTimeshiftStop.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_stop.png")));
+			btnRemoteTimeshiftStop.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			btnRemoteTimeshiftStop.setFocusPainted(false);
+			btnRemoteTimeshiftStop.setToolTipText("Stop Timeshift");
+			btnRemoteTimeshiftStop.setBounds(10, 552, 77, 77);
+			panelRemoteControl.add(btnRemoteTimeshiftStop);
 
-                        btnRemoteTimeshiftPlayPause = new JButton();
-                        btnRemoteTimeshiftPlayPause.setSelectedIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_play.png")));
-                        btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_paus.png")));
-                        btnRemoteTimeshiftPlayPause.addActionListener(new ActionListener() {
-                                public void actionPerformed(ActionEvent e) {
-                                        btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_play.png")));
-                                        electronics.setZoom(false, persistent);
-                                }
-                        });
-                        btnRemoteTimeshiftPlayPause.setFocusPainted(false);
-                        btnRemoteTimeshiftPlayPause.setToolTipText("Start/Pause Timeshift");
-                        btnRemoteTimeshiftPlayPause.setBounds(141, 552, 77, 77);
-                        panelRemoteControl.add(btnRemoteTimeshiftPlayPause);
-                        
-                        btnRemoteTimeshiftForwards = new JButton();
-                        btnRemoteTimeshiftForwards.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_ffarw.png")));
-                        btnRemoteTimeshiftForwards.addActionListener(new ActionListener() {
-                                public void actionPerformed(ActionEvent e) {
-                                }
-                        });
-                        btnRemoteTimeshiftForwards.setFocusPainted(false);
-                        btnRemoteTimeshiftForwards.setToolTipText("FastForward Timeshift");
-                        btnRemoteTimeshiftForwards.setBounds(271, 552, 77, 77);
-                        panelRemoteControl.add(btnRemoteTimeshiftForwards);
+			btnRemoteTimeshiftPlayPause = new JButton();
+			btnRemoteTimeshiftPlayPause.setSelectedIcon(new ImageIcon(RemoteControl.class
+					.getResource("/picture/p_play.png")));
+			btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_paus.png")));
+			btnRemoteTimeshiftPlayPause.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class
+							.getResource("/picture/p_play.png")));
+					electronics.setZoom(false, persistent);
+				}
+			});
+			btnRemoteTimeshiftPlayPause.setFocusPainted(false);
+			btnRemoteTimeshiftPlayPause.setToolTipText("Start/Pause Timeshift");
+			btnRemoteTimeshiftPlayPause.setBounds(141, 552, 77, 77);
+			panelRemoteControl.add(btnRemoteTimeshiftPlayPause);
 
-                        final JSlider sliderRemoteVolume = new JSlider();
-                        sliderRemoteVolume.addChangeListener(new ChangeListener() {
-                                public void stateChanged(ChangeEvent arg0) {
-                                        try {
-                                                persistent.setVolume(sliderRemoteVolume.getValue());
-                                        } catch (Exception e3) {
-                                                e3.printStackTrace();
-                                        }
-                                }
-                        });
-                        sliderRemoteVolume.setToolTipText("Change Volume");
-                        sliderRemoteVolume.setBounds(40, 516, 278, 25);
-                        sliderRemoteVolume.setValue(persistent.getVolume());
-                        panelRemoteControl.add(sliderRemoteVolume);
+			btnRemoteTimeshiftForwards = new JButton();
+			btnRemoteTimeshiftForwards.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_ffarw.png")));
+			btnRemoteTimeshiftForwards.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			btnRemoteTimeshiftForwards.setFocusPainted(false);
+			btnRemoteTimeshiftForwards.setToolTipText("FastForward Timeshift");
+			btnRemoteTimeshiftForwards.setBounds(271, 552, 77, 77);
+			panelRemoteControl.add(btnRemoteTimeshiftForwards);
 
-                        JButton btnRemoteVolumeDown = new JButton();
-                        btnRemoteVolumeDown.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_volD.png")));
-                        btnRemoteVolumeDown.addActionListener(new ActionListener() {
-                                public void actionPerformed(ActionEvent e) {
-                                        try {
-                                                if (sliderRemoteVolume.getMinimum() < sliderRemoteVolume.getValue()){
-                                                	//sliderRemoteVolume.setValue(sliderRemoteVolume.getValue() - 1);
-                                                	if(electronics != null)
-                                                		electronics.setVolume(sliderRemoteVolume.getValue() - 1, sliderRemoteVolume);
-                                                	else
-                                                		System.out.println("Keine TvElectronics erstellt");
-                                                }
-                                        } catch (Exception e6) {
-                                                e6.printStackTrace();
-                                        }
-                                }
-                        });
-                        btnRemoteVolumeDown.setFocusPainted(false);
-                        btnRemoteVolumeDown.setToolTipText("Decrease Volume");
-                        btnRemoteVolumeDown.setBounds(10, 516, 25, 25);
-                        panelRemoteControl.add(btnRemoteVolumeDown);
+			final JSlider sliderRemoteVolume = new JSlider();
+			sliderRemoteVolume.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent arg0) {
+					try {
+						persistent.setVolume(sliderRemoteVolume.getValue());
+					} catch (Exception e3) {
+						e3.printStackTrace();
+					}
+				}
+			});
+			sliderRemoteVolume.setToolTipText("Change Volume");
+			sliderRemoteVolume.setBounds(40, 516, 278, 25);
+			sliderRemoteVolume.setValue(persistent.getVolume());
+			panelRemoteControl.add(sliderRemoteVolume);
 
-                        JButton btnRemoteVolumeUp = new JButton();
-                        btnRemoteVolumeUp.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_volU.png")));
-                        btnRemoteVolumeUp.addActionListener(new ActionListener() {
-                                public void actionPerformed(ActionEvent arg0) {
-                                        try {
-                                                if (sliderRemoteVolume.getMaximum() > sliderRemoteVolume.getValue()){
-                                                    //sliderRemoteVolume.setValue(sliderRemoteVolume.getValue() + 1);
-                                                	if(electronics != null)
-                                                        electronics.setVolume(sliderRemoteVolume.getValue() + 1, sliderRemoteVolume);
-                                                	else
-                                                		System.out.println("Keine TvElectronics erstellt");
-                                                }
-                                        } catch (Exception e5) {
-                                                e5.printStackTrace();
-                                        }
-                                }
-                        });
-                        btnRemoteVolumeUp.setFocusPainted(false);
-                        btnRemoteVolumeUp.setToolTipText("Increase Volume");
-                        btnRemoteVolumeUp.setBounds(323, 516, 25, 25);
-                        panelRemoteControl.add(btnRemoteVolumeUp);
+			JButton btnRemoteVolumeDown = new JButton();
+			btnRemoteVolumeDown.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_volD.png")));
+			btnRemoteVolumeDown.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						if (sliderRemoteVolume.getMinimum() < sliderRemoteVolume.getValue()) {
+							// sliderRemoteVolume.setValue(sliderRemoteVolume.getValue()
+							// - 1);
+							if (electronics != null)
+								electronics.setVolume(sliderRemoteVolume.getValue() - 1, sliderRemoteVolume);
+							else
+								System.out.println("Keine TvElectronics erstellt");
+						}
+					} catch (Exception e6) {
+						e6.printStackTrace();
+					}
+				}
+			});
+			btnRemoteVolumeDown.setFocusPainted(false);
+			btnRemoteVolumeDown.setToolTipText("Decrease Volume");
+			btnRemoteVolumeDown.setBounds(10, 516, 25, 25);
+			panelRemoteControl.add(btnRemoteVolumeDown);
 
-                        JPanel panelRemoteSettings = new JPanel();
-                        panelRemoteSettings.setBounds(0, 0, 360, 640);
-                        frame.getContentPane().add(panelRemoteSettings);
-                } catch (Exception e2) {
-                        e2.printStackTrace();
-                }
-        }
+			JButton btnRemoteVolumeUp = new JButton();
+			btnRemoteVolumeUp.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_volU.png")));
+			btnRemoteVolumeUp.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					try {
+						if (sliderRemoteVolume.getMaximum() > sliderRemoteVolume.getValue()) {
+							// sliderRemoteVolume.setValue(sliderRemoteVolume.getValue()
+							// + 1);
+							if (electronics != null)
+								electronics.setVolume(sliderRemoteVolume.getValue() + 1, sliderRemoteVolume);
+							else
+								System.out.println("Keine TvElectronics erstellt");
+						}
+					} catch (Exception e5) {
+						e5.printStackTrace();
+					}
+				}
+			});
+			btnRemoteVolumeUp.setFocusPainted(false);
+			btnRemoteVolumeUp.setToolTipText("Increase Volume");
+			btnRemoteVolumeUp.setBounds(323, 516, 25, 25);
+			panelRemoteControl.add(btnRemoteVolumeUp);
 
-        
-        //TODO Deactivate PiP/Timeshift 
-        public void updateButtonLayout() {
-                try {
-                        switch (persistent.getUsermode()) {
-                        case 0:
-                                btnRemotePiPSwitch.setVisible(false);
-                                btnRemotePiPActivate.setVisible(false);
-                                btnRemoteTimeshiftStop.setVisible(false);
-                                btnRemoteTimeshiftPlayPause.setVisible(false);
-                                btnRemoteTimeshiftForwards.setVisible(false);
-                                break;
+			JPanel panelRemoteSettings = new JPanel();
+			panelRemoteSettings.setBounds(0, 0, 360, 640);
+			frame.getContentPane().add(panelRemoteSettings);
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+	}
 
-                        case 1:
-                                btnRemotePiPSwitch.setVisible(false);
-                                btnRemotePiPActivate.setVisible(false);
-                                btnRemoteTimeshiftStop.setVisible(true);
-                                btnRemoteTimeshiftPlayPause.setVisible(true);
-                                btnRemoteTimeshiftForwards.setVisible(true);
-                                break;
+	// TODO Deactivate PiP/Timeshift
+	public void updateButtonLayout() {
+		try {
+			switch (persistent.getUsermode()) {
+			case 0:
+				btnRemotePiPSwitch.setVisible(false);
+				btnRemotePiPActivate.setVisible(false);
+				btnRemoteTimeshiftStop.setVisible(false);
+				btnRemoteTimeshiftPlayPause.setVisible(false);
+				btnRemoteTimeshiftForwards.setVisible(false);
+				break;
 
-                        case 2:
-                                btnRemotePiPSwitch.setVisible(true);
-                                btnRemotePiPSwitch.setEnabled(false);
-                                btnRemotePiPActivate.setVisible(true);
-                                btnRemoteTimeshiftStop.setVisible(true);
-                                btnRemoteTimeshiftPlayPause.setVisible(true);
-                                btnRemoteTimeshiftForwards.setVisible(true);
-                                break;
-                        }
-                } catch (Exception e7) {
-                        e7.printStackTrace();
-                }
-        }
+			case 1:
+				btnRemotePiPSwitch.setVisible(false);
+				btnRemotePiPActivate.setVisible(false);
+				btnRemoteTimeshiftStop.setVisible(true);
+				btnRemoteTimeshiftPlayPause.setVisible(true);
+				btnRemoteTimeshiftForwards.setVisible(true);
+				break;
 
-        public JButton getPiPActive() {
-                return btnRemotePiPActivate;
-        }
+			case 2:
+				btnRemotePiPSwitch.setVisible(true);
+				btnRemotePiPSwitch.setEnabled(false);
+				btnRemotePiPActivate.setVisible(true);
+				btnRemoteTimeshiftStop.setVisible(true);
+				btnRemoteTimeshiftPlayPause.setVisible(true);
+				btnRemoteTimeshiftForwards.setVisible(true);
+				break;
+			}
+		} catch (Exception e7) {
+			e7.printStackTrace();
+		}
+	}
+
+	public JButton getPiPActive() {
+		return btnRemotePiPActivate;
+	}
 
 }
