@@ -211,22 +211,26 @@ public class TvElectronics {
 	 * @throws Exception
 	 *             wenn der Wert von "start" nicht zum aktuellen Zustand passt
 	 */
-	public void recordTimeShift(boolean start, final JToggleButton play) throws Exception {
+	public void recordTimeShift(boolean start, final JToggleButton play)
+			throws Exception {
 		if (this.isRecording == start)
 			throw new Exception("TimeShift is already "
 					+ (this.isRecording ? "recording" : "stopped"));
-		if (!start){
+		if (!start) {
 			this.playTimeShift(false, 0);
 		} else {
 			(screen.getProgressBar()).setVisible(true);
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					while (((screen.getProgressBar()).getValue() < (screen.getProgressBar()).getMaximum()) && (play.isSelected())) {
-						(screen.getProgressBar()).setValue((screen.getProgressBar())
-								.getValue() + 1);
+					while (((screen.getProgressBar()).getValue() < (screen
+							.getProgressBar()).getMaximum())
+							&& (play.isSelected())) {
+						(screen.getProgressBar()).setValue((screen
+								.getProgressBar()).getValue() + 1);
 						try {
-							screen.setProgressBarValue((screen.getProgressBar()).getValue());
+							screen.setProgressBarValue((screen.getProgressBar())
+									.getValue());
 							Thread.sleep(30);
 						} catch (InterruptedException ie) {
 							ie.printStackTrace();
@@ -261,8 +265,7 @@ public class TvElectronics {
 		System.out.println((start ? "Start" : "Stop") + " timeshift playing"
 				+ (start ? " (offset " + offset + " seconds)" : ""));
 	}
-	
-	
+
 	public BufferedImage resize(BufferedImage img, int newW, int newH) {
 		int w = img.getWidth();
 		int h = img.getHeight();

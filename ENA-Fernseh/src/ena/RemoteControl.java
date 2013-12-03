@@ -66,6 +66,7 @@ public class RemoteControl {
 	/**
 	 * Create the application.
 	 */
+	// Konstruktor
 	public RemoteControl() {
 		channelList = Channel.exampleFill();
 		persistent = new Persistent();
@@ -94,6 +95,7 @@ public class RemoteControl {
 			JButton btnRemotePower = new JButton();
 			btnRemotePower.setIcon(new ImageIcon(RemoteControl.class
 					.getResource("/picture/p_OnOff.png")));
+			// Erstellt den Bildschirm und TvElectronics
 			btnRemotePower.addActionListener(new RunnableActionListener() {
 				public void run() {
 					if (screen == null || !screen.isVisible()) {
@@ -158,6 +160,8 @@ public class RemoteControl {
 					.getResource("/picture/p_options.png")));
 			btnRemoteSettings.setSelectedIcon(new ImageIcon(RemoteControl.class
 					.getResource("/picture/p_options.png")));
+			// übergibt Screen, Persistent, TvElectronics und RemoteControl an
+			// Settings
 			btnRemoteSettings.addActionListener(new RunnableActionListener() {
 				public void run() {
 					if (screen != null) {
@@ -188,6 +192,8 @@ public class RemoteControl {
 			panelRemoteControl.add(scrollPaneRemoteStations);
 			// Channel Table
 			tableRemoteStations = new JTable();
+			// schaltet den Kanal um mit Hilfe der Funktion setChannel von
+			// TvElectronics um
 			tableRemoteStations.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					try {
@@ -262,6 +268,8 @@ public class RemoteControl {
 			btnRemoteTimeshiftStop.setBounds(10, 552, 77, 77);
 			panelRemoteControl.add(btnRemoteTimeshiftStop);
 			// TimeShift Play/Pause Button
+			// benutzt die Funktion recordTimeShift von TvElectronics
+			// lässt in dem Fernseher ein ProgressBar erscheinen
 			btnRemoteTimeshiftPlayPause = new JToggleButton();
 			btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(
 					RemoteControl.class.getResource("/picture/p_paus.png")));
@@ -269,18 +277,21 @@ public class RemoteControl {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						if (screen == null)
-							System.out.println("Kein Screen für die Aufnahme vorhanden.");
+							System.out
+									.println("Kein Screen für die Aufnahme vorhanden.");
 						else {
 							if (btnRemoteTimeshiftPlayPause.isSelected()) {
 								btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(
 										RemoteControl.class
 												.getResource("/picture/p_play.png")));
-								electronics.recordTimeShift(true, btnRemoteTimeshiftPlayPause);
+								electronics.recordTimeShift(true,
+										btnRemoteTimeshiftPlayPause);
 							} else {
 								btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(
 										RemoteControl.class
 												.getResource("/picture/p_paus.png")));
-								electronics.recordTimeShift(false, btnRemoteTimeshiftPlayPause);
+								electronics.recordTimeShift(false,
+										btnRemoteTimeshiftPlayPause);
 							}
 						}
 					} catch (Exception e6) {
@@ -323,13 +334,12 @@ public class RemoteControl {
 			JButton btnRemoteVolumeDown = new JButton();
 			btnRemoteVolumeDown.setIcon(new ImageIcon(RemoteControl.class
 					.getResource("/picture/p_volD.png")));
+			// ruft die Funktion setVolume von TvElectronics auf
 			btnRemoteVolumeDown.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						if (sliderRemoteVolume.getMinimum() < sliderRemoteVolume
 								.getValue()) {
-							// sliderRemoteVolume.setValue(sliderRemoteVolume.getValue()
-							// - 1);
 							if (electronics != null)
 								electronics.setVolume(
 										sliderRemoteVolume.getValue() - 1,
@@ -351,13 +361,12 @@ public class RemoteControl {
 			JButton btnRemoteVolumeUp = new JButton();
 			btnRemoteVolumeUp.setIcon(new ImageIcon(RemoteControl.class
 					.getResource("/picture/p_volU.png")));
+			// ruft die Funktion setVolume von TvElectronics auf
 			btnRemoteVolumeUp.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
 						if (sliderRemoteVolume.getMaximum() > sliderRemoteVolume
 								.getValue()) {
-							// sliderRemoteVolume.setValue(sliderRemoteVolume.getValue()
-							// + 1);
 							if (electronics != null)
 								electronics.setVolume(
 										sliderRemoteVolume.getValue() + 1,

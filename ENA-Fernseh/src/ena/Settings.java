@@ -22,6 +22,7 @@ public class Settings {
 	private TvElectronics electronics;
 	private Screen screen;
 
+	// Konstruktor
 	public Settings(RemoteControl remote, Persistent p,
 			TvElectronics electronics, Screen screen) {
 		this.remote = remote;
@@ -36,19 +37,22 @@ public class Settings {
 	 */
 	private void initialize() {
 		try {
+			// neues Settingsfenster
 			frmSettings = new JFrame();
 			frmSettings.setTitle("Settings");
 			frmSettings.setBounds(100, 100, 400, 200);
 			frmSettings.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			frmSettings.getContentPane().setLayout(null);
-
+			// ComboBox für die 3 verschiedenen Usermodi. Ist Standart auf Easy
+			// (am wenigsten Funktionen)
 			final JComboBox<String> comboBoxSettingsUsermode = new JComboBox<String>();
 			comboBoxSettingsUsermode.setModel(new DefaultComboBoxModel<String>(
 					new String[] { "Easy", "Normal", "Expert" }));
 			comboBoxSettingsUsermode.setBounds(212, 8, 90, 20);
 			frmSettings.getContentPane().add(comboBoxSettingsUsermode);
 			comboBoxSettingsUsermode.setSelectedIndex(persistent.getUsermode());
-
+			// ComboBox für die 3 verschiedenen Auflösungen. Standart ist auf
+			// 16:9
 			final JComboBox<String> comboBoxSettingsAspectRatio = new JComboBox<String>();
 			comboBoxSettingsAspectRatio
 					.setModel(new DefaultComboBoxModel<String>(new String[] {
@@ -56,7 +60,9 @@ public class Settings {
 			comboBoxSettingsAspectRatio.setBounds(212, 36, 90, 20);
 			frmSettings.getContentPane().add(comboBoxSettingsAspectRatio);
 			comboBoxSettingsAspectRatio.setSelectedIndex(persistent.getRatio());
-
+			// savebutton, um Usermode und Ratio zu speichern. Desweiteren ein
+			// Update vom Layout der Fernbedienung und zoomen des Bildes nach
+			// Usermode
 			final JButton btnSettingsSave = new JButton("Save");
 			btnSettingsSave.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -66,7 +72,8 @@ public class Settings {
 						persistent.setRatio(comboBoxSettingsAspectRatio
 								.getSelectedIndex());
 						remote.updateButtonLayout();
-						if((persistent.getRatio() == 1) || (persistent.getRatio() == 2))
+						if ((persistent.getRatio() == 1)
+								|| (persistent.getRatio() == 2))
 							electronics.setZoom(true);
 						else
 							electronics.setZoom(false);
@@ -78,7 +85,7 @@ public class Settings {
 			});
 			btnSettingsSave.setBounds(212, 126, 90, 25);
 			frmSettings.getContentPane().add(btnSettingsSave);
-
+			// Einstellungen abbrechen. Es wird nichts gespeichert
 			JButton btnSettingsCancel = new JButton("Cancel");
 			btnSettingsCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -91,7 +98,7 @@ public class Settings {
 			JLabel lblSettingsUsermode = new JLabel("Usermodus");
 			lblSettingsUsermode.setBounds(82, 11, 90, 14);
 			frmSettings.getContentPane().add(lblSettingsUsermode);
-
+			// Button um einen erneuten Sendersuchlauf zu starten
 			final JButton btnStationScan = new JButton("Station Scan");
 			btnStationScan.addActionListener(new RunnableActionListener() {
 				public void run() {
@@ -114,7 +121,7 @@ public class Settings {
 			});
 			btnStationScan.setBounds(137, 64, 110, 23);
 			frmSettings.getContentPane().add(btnStationScan);
-
+			// Progressbar für Sendersuchlauf
 			progressBarSettingsStationScan = new JProgressBar();
 			progressBarSettingsStationScan.setBounds(10, 98, 364, 14);
 			frmSettings.getContentPane().add(progressBarSettingsStationScan);

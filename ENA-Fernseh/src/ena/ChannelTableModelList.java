@@ -5,9 +5,11 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-public class ChannelTableModelList extends AbstractTableModel implements TableModel {
+//Klasse um die Senderliste mit einer Tabelle auszulesen
+public class ChannelTableModelList extends AbstractTableModel implements
+		TableModel {
 	private List<Channel> list;
-	
+
 	public ChannelTableModelList(List<Channel> list) {
 		this.list = list;
 	}
@@ -15,11 +17,11 @@ public class ChannelTableModelList extends AbstractTableModel implements TableMo
 	public int getColumnCount() {
 		return 2;
 	}
-	
+
 	public int getRowCount() {
 		return list.size();
 	}
-	
+
 	public Object getValueAt(int row, int column) {
 		Channel channel = list.get(row);
 		switch (column) {
@@ -30,7 +32,7 @@ public class ChannelTableModelList extends AbstractTableModel implements TableMo
 		}
 		return null;
 	}
-	
+
 	public String getColumnName(int columnIndex) {
 		switch (columnIndex) {
 		case 0:

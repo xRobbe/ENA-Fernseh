@@ -48,6 +48,7 @@ public class Screen {
 	private JLabel lblEPG = new JLabel("Das Erste");
 	private JPanel panelScreenEPG;
 
+	// Screen Konstruktor
 	public Screen(Persistent persistent) {
 		this.persisten = persistent;
 		initialize();
@@ -57,12 +58,14 @@ public class Screen {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		// neues Fenster erstellen
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.BLACK);
 		frame.setBounds(0, 0, 1286, 746);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
+		// Panel für Willkommenbildschirm
 		panelWelcome = new JPanel();
 		panelWelcome.setBounds(0, 0, 1280, 720);
 		frame.getContentPane().add(panelWelcome);
@@ -73,7 +76,7 @@ public class Screen {
 		lblScreenWelcomeMessage.setBounds(440, 98, 400, 100);
 		lblScreenWelcomeMessage.setHorizontalAlignment(SwingConstants.CENTER);
 		panelWelcome.add(lblScreenWelcomeMessage);
-
+		// Ladebalken für Willkommenbildschirm
 		progressBarScreenWelcome = new JProgressBar();
 		progressBarScreenWelcome.setBounds(320, 333, 640, 38);
 		panelWelcome.add(progressBarScreenWelcome);
@@ -83,19 +86,19 @@ public class Screen {
 		lblScreenWelcomeStatus.setHorizontalAlignment(SwingConstants.CENTER);
 		lblScreenWelcomeStatus.setBounds(320, 223, 640, 63);
 		panelWelcome.add(lblScreenWelcomeStatus);
-
+		// Panel für den Hauptbildschirm
 		panelMainScreen = new JPanel();
 		panelMainScreen.setVisible(false);
 		panelMainScreen.setBackground(new Color(0, 0, 0));
 		panelMainScreen.setBounds(0, 0, 1280, 720);
 		frame.getContentPane().add(panelMainScreen);
 		panelMainScreen.setLayout(null);
-		
+		// Progressbar für die Timeshift Funktion
 		progressBarTimeShift = new JProgressBar();
 		progressBarTimeShift.setBounds(320, 600, 640, 38);
 		progressBarTimeShift.setVisible(false);
 		panelMainScreen.add(progressBarTimeShift);
-		
+		// Ein EPG an der unteren Bildschirmseite (ist ausgeblendet)
 		panelScreenEPG = new JPanel();
 		panelScreenEPG.setBackground(new Color(164, 164, 164));
 		panelScreenEPG.setBounds(256, 720, 768, 128);
@@ -106,19 +109,19 @@ public class Screen {
 		panelScreenEPG.add(lblEPG, BorderLayout.CENTER);
 		lblEPG.setFont(new Font("Tahoma", Font.BOLD, 40));
 		lblEPG.setHorizontalAlignment(SwingConstants.CENTER);
-
+		// Panel für das PiP Fenster
 		panelScreenPiP = new JPanel();
 		panelScreenPiP.setBounds(886, 11, 384, 216);
 		panelMainScreen.add(panelScreenPiP);
 		panelScreenPiP.setVisible(false);
 		panelScreenPiP.setLayout(null);
-
+		// ScrollPane für die Senderliste an der linken Seite (ausgeblendet)
 		final JScrollPane scrollPaneScreenStations = new JScrollPane();
 		scrollPaneScreenStations.setBorder(null);
 		scrollPaneScreenStations.setBackground(new Color(0, 0, 0));
 		scrollPaneScreenStations.setBounds(new Rectangle(-256, 0, 256, 720));
 		panelMainScreen.add(scrollPaneScreenStations);
-
+		// Senderliste für das ScrollPane
 		final JList<String> listScreenStations = new JList<String>();
 		listScreenStations.setForeground(new Color(216, 0, 116));
 		listScreenStations.setBackground(new Color(164, 164, 164));
@@ -142,76 +145,52 @@ public class Screen {
 				return values[index];
 			}
 		});
-
-		JButton btnSenderliste = new JButton("Senderliste");
-		btnSenderliste.setBounds(377, 293, 85, 23);
-		panelMainScreen.add(btnSenderliste);
-
-		JButton btnEpg = new JButton("EPG");
-		btnEpg.setBounds(377, 327, 85, 23);
-		panelMainScreen.add(btnEpg);
-
-		JButton btnPip = new JButton("PiP");
-		btnPip.setBounds(377, 361, 85, 23);
-		panelMainScreen.add(btnPip);
-		btnPip.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (panelScreenPiP.isVisible())
-					panelScreenPiP.setVisible(false);
-				else
-					panelScreenPiP.setVisible(true);
-
-				try {
-					BufferedImage newPicture;
-					newPicture = ImageIO.read(new File(
-							"src/television/dasErste.jpg"));
-					panelMainScreen.remove(picLabelMain);
-					picLabelMain = new JLabel(new ImageIcon(newPicture));
-					picLabelMain.setBounds(0, 0, 1280, 720);
-					panelMainScreen.add(picLabelMain);
-
-					panelMainScreen.repaint();
-
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
-		btnEpg.addActionListener(new RunnableActionListener() {
-			public void run() {
-				try {
-					scrollPanelY(panelScreenEPG, 720, 592);
-				} catch (InterruptedException ie) {
-					ie.printStackTrace();
-				}
-			}
-
-			public void actionPerformed(ActionEvent e) {
-				new Thread(this).start();
-			}
-		});
-		btnSenderliste.addActionListener(new RunnableActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				new Thread(this).start();
-			}
-
-			public void run() {
-				try {
-					scrollPanelX(scrollPaneScreenStations, 0, -256);
-				} catch (InterruptedException ie) {
-					ie.printStackTrace();
-				}
-			}
-		});
-		
+		/*
+		 * für Debuggen JButton btnSenderliste = new JButton("Senderliste");
+		 * btnSenderliste.setBounds(377, 293, 85, 23);
+		 * panelMainScreen.add(btnSenderliste);
+		 * 
+		 * JButton btnEpg = new JButton("EPG"); btnEpg.setBounds(377, 327, 85,
+		 * 23); panelMainScreen.add(btnEpg);
+		 * 
+		 * JButton btnPip = new JButton("PiP"); btnPip.setBounds(377, 361, 85,
+		 * 23); panelMainScreen.add(btnPip); btnPip.addActionListener(new
+		 * ActionListener() { public void actionPerformed(ActionEvent e) { if
+		 * (panelScreenPiP.isVisible()) panelScreenPiP.setVisible(false); else
+		 * panelScreenPiP.setVisible(true);
+		 * 
+		 * try { BufferedImage newPicture; newPicture = ImageIO.read(new File(
+		 * "src/television/dasErste.jpg"));
+		 * panelMainScreen.remove(picLabelMain); picLabelMain = new JLabel(new
+		 * ImageIcon(newPicture)); picLabelMain.setBounds(0, 0, 1280, 720);
+		 * panelMainScreen.add(picLabelMain);
+		 * 
+		 * panelMainScreen.repaint();
+		 * 
+		 * } catch (IOException e1) { // TODO Auto-generated catch block
+		 * e1.printStackTrace(); } } });
+		 * 
+		 * btnEpg.addActionListener(new RunnableActionListener() { public void
+		 * run() { try { scrollPanelY(panelScreenEPG, 720, 592); } catch
+		 * (InterruptedException ie) { ie.printStackTrace(); } }
+		 * 
+		 * public void actionPerformed(ActionEvent e) { new
+		 * Thread(this).start(); } }); btnSenderliste.addActionListener(new
+		 * RunnableActionListener() { public void actionPerformed(ActionEvent
+		 * arg0) { new Thread(this).start(); }
+		 * 
+		 * public void run() { try { scrollPanelX(scrollPaneScreenStations, 0,
+		 * -256); } catch (InterruptedException ie) { ie.printStackTrace(); } }
+		 * });
+		 */
+		// erstellt ein Objekt von TvElectronics
 		if (electronics == null) {
 			electronics = new TvElectronics(panelMainScreen, panelScreenPiP,
 					persisten, this);
 			System.out.println("TvElectronics wurde erstellt");
 		} else
 			System.out.println("TvElectronics ist schon vorhanden");
-		
+		// Standart Bilder und Sender für das Haupt- und PiP-Fenster
 		BufferedImage myPicture;
 		try {
 			myPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
@@ -220,7 +199,7 @@ public class Screen {
 			picLabelMain.setOpaque(true);
 			picLabelMain.setVisible(true);
 			panelMainScreen.add(picLabelMain);
-			if((persisten.getRatio() == 1) || (persisten.getRatio() == 2))
+			if ((persisten.getRatio() == 1) || (persisten.getRatio() == 2))
 				electronics.setZoom(true);
 
 			myPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
@@ -235,7 +214,7 @@ public class Screen {
 		} catch (Exception e3) {
 			e3.printStackTrace();
 		}
-
+		// startet den Durchlauf des Ladebalkens
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -257,6 +236,7 @@ public class Screen {
 
 	}
 
+	// Anpassung der Größe des Bildes für die Fenster
 	public BufferedImage resize(BufferedImage img, int newW, int newH) {
 		int w = img.getWidth();
 		int h = img.getHeight();
@@ -273,6 +253,7 @@ public class Screen {
 		return electronics;
 	}
 
+	// lässt panel auf der y-Achse bewegen
 	public void scrollPanelY(JComponent panel, int max, int min)
 			throws InterruptedException {
 		int time = 300 / Math.abs(max - min);
@@ -294,6 +275,7 @@ public class Screen {
 		}
 	}
 
+	// lässt panel auf der x-Achse bewegen
 	private void scrollPanelX(JComponent panel, int max, int min)
 			throws InterruptedException {
 		int time = 300 / Math.abs(max - min);
@@ -314,6 +296,7 @@ public class Screen {
 		}
 	}
 
+	// diverse getter und setter
 	public void setEpgLabel(String sName) {
 		lblEPG.setText(sName);
 	}
@@ -337,27 +320,29 @@ public class Screen {
 	public JPanel getPanelScreenEPG() {
 		return panelScreenEPG;
 	}
-	
-	public JPanel getPanelMain(){
+
+	public JPanel getPanelMain() {
 		return panelMainScreen;
 	}
-	
-	public JLabel getMainLabel(){
+
+	public JLabel getMainLabel() {
 		return picLabelMain;
 	}
-	
-	public void setMainLabel(JLabel picLabelMain){
+
+	public void setMainLabel(JLabel picLabelMain) {
 		this.picLabelMain = picLabelMain;
 	}
-	
-	public JProgressBar getProgressBar(){
+
+	public JProgressBar getProgressBar() {
 		return progressBarTimeShift;
 	}
-	
-	public void setProgressBarValue(int bar){
+
+	public void setProgressBarValue(int bar) {
 		(this.progressBarTimeShift).setValue(bar);
 	}
 
+	// das Bild in dem Haupt- oder PiP-Fenster ändern
+	// Hauptfenster, wenn choosePiP = false
 	public void changePicture(String channelPicturePath, boolean choosePiP)
 			throws IOException {
 		BufferedImage newPicture;

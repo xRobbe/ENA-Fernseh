@@ -28,10 +28,11 @@ public class Persistent {
 			properties.load(in);
 
 			if (!(checkConfig())) {
-				properties.setProperty(VOLUME, "50");
-				properties.setProperty(STATION, "1");
-				properties.setProperty(USERMODE, "0");
-				properties.setProperty(RATIO, "0");
+				properties.setProperty(VOLUME, "50"); // Mittelwert
+				properties.setProperty(STATION, "1"); // Sender
+				properties.setProperty(USERMODE, "0"); // Usermodus Easy (am
+														// wenigsten Funktionen)
+				properties.setProperty(RATIO, "0"); // Format 16:9
 				properties.store(out(), null);
 			}
 		} catch (Exception e) {
@@ -39,6 +40,7 @@ public class Persistent {
 		}
 	}
 
+	// setter und getter
 	public void setVolume(int volume) throws Exception {
 		properties.setProperty(VOLUME, String.valueOf(volume));
 		properties.store(out(), null);
@@ -75,6 +77,7 @@ public class Persistent {
 		return Integer.parseInt(properties.getProperty(RATIO));
 	}
 
+	// ist Konfig-Datei vorhanden und mit gültigen Werten gefüllt
 	private boolean checkConfig() {
 		if (!(properties.containsKey(VOLUME)))
 			return false;
