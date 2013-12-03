@@ -80,24 +80,6 @@ public class Screen {
 		lblScreenWelcomeStatus.setBounds(320, 223, 640, 63);
 		panelWelcome.add(lblScreenWelcomeStatus);
 
-		JButton btnScreenWelcomeDebugDone = new JButton("Done");
-		btnScreenWelcomeDebugDone.addActionListener(new RunnableActionListener() {
-			public void run() {
-				while (progressBarScreenWelcome.getValue() < progressBarScreenWelcome.getMaximum()) {
-					progressBarScreenWelcome.setValue(progressBarScreenWelcome.getValue() + 1);
-					try {
-						Thread.sleep(30);
-					} catch (InterruptedException ie) {
-						ie.printStackTrace();
-					}
-				}
-				panelWelcome.setVisible(false);
-				panelMainScreen.setVisible(true);
-			}
-		});
-		btnScreenWelcomeDebugDone.setBounds(575, 437, 89, 23);
-		panelWelcome.add(btnScreenWelcomeDebugDone);
-
 		panelMainScreen = new JPanel();
 		panelMainScreen.setVisible(false);
 		panelMainScreen.setBackground(new Color(0, 0, 0));
@@ -169,22 +151,22 @@ public class Screen {
 					panelScreenPiP.setVisible(false);
 				else
 					panelScreenPiP.setVisible(true);
-				
-				try {		
+
+				try {
 					BufferedImage newPicture;
 					newPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
 					panelMainScreen.remove(picLabel);
 					picLabel = new JLabel(new ImageIcon(newPicture));
 					picLabel.setBounds(0, 0, 1280, 720);
 					panelMainScreen.add(picLabel);
-					
+
 					panelMainScreen.repaint();
-					
+
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		});
 		btnEpg.addActionListener(new RunnableActionListener() {
@@ -234,6 +216,24 @@ public class Screen {
 		}
 		else
 			System.out.println("TvElectronics ist schon vorhanden");
+		
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (progressBarScreenWelcome.getValue() < progressBarScreenWelcome.getMaximum()) {
+					progressBarScreenWelcome.setValue(progressBarScreenWelcome.getValue() + 1);
+					try {
+						Thread.sleep(30);
+					} catch (InterruptedException ie) {
+						ie.printStackTrace();
+					}
+				}
+				panelWelcome.setVisible(false);
+				panelMainScreen.setVisible(true);
+				
+			}
+		}).start();
+		
 	}
 
 	public BufferedImage resize(BufferedImage img, int newW, int newH) {
@@ -311,7 +311,7 @@ public class Screen {
 	public void dispose() {
 		frame.dispose();
 	}
-	
+
 	public void changePicture(String channelPicturePath) throws IOException {
 		BufferedImage newPicture;
 		newPicture = ImageIO.read(new File(channelPicturePath));
@@ -319,7 +319,7 @@ public class Screen {
 		picLabel = new JLabel(new ImageIcon(newPicture));
 		picLabel.setBounds(0, 0, 1280, 720);
 		panelMainScreen.add(picLabel);
-		
+
 		panelMainScreen.repaint();
 	}
 }
