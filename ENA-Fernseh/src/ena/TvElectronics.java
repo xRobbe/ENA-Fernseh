@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JLabel;
+import javax.swing.JToggleButton;
 
 import java.awt.Rectangle;
 import java.io.File;
@@ -210,12 +211,30 @@ public class TvElectronics {
 	 * @throws Exception
 	 *             wenn der Wert von "start" nicht zum aktuellen Zustand passt
 	 */
-	public void recordTimeShift(boolean start) throws Exception {
+	public void recordTimeShift(boolean start, final JToggleButton play) throws Exception {
 		if (this.isRecording == start)
 			throw new Exception("TimeShift is already "
 					+ (this.isRecording ? "recording" : "stopped"));
-		if (!start)
+		if (!start){
 			this.playTimeShift(false, 0);
+		} else {
+			(screen.getProgressBar()).setVisible(true);
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					while (((screen.getProgressBar()).getValue() < (screen.getProgressBar()).getMaximum()) && (play.isSelected())) {
+						(screen.getProgressBar()).setValue((screen.getProgressBar())
+								.getValue() + 1);
+						try {
+							screen.setProgressBarValue((screen.getProgressBar()).getValue());
+							Thread.sleep(30);
+						} catch (InterruptedException ie) {
+							ie.printStackTrace();
+						}
+					}
+				}
+			}).start();
+		}
 		this.isRecording = start;
 		this.recordingStartTime = now();
 		System.out.println((start ? "Start" : "Stop") + " timeshift recording");
@@ -242,7 +261,8 @@ public class TvElectronics {
 		System.out.println((start ? "Start" : "Stop") + " timeshift playing"
 				+ (start ? " (offset " + offset + " seconds)" : ""));
 	}
-
+	
+	
 	public BufferedImage resize(BufferedImage img, int newW, int newH) {
 		int w = img.getWidth();
 		int h = img.getHeight();

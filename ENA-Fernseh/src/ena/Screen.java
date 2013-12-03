@@ -92,8 +92,9 @@ public class Screen {
 		panelMainScreen.setLayout(null);
 		
 		progressBarTimeShift = new JProgressBar();
-		progressBarTimeShift.setBounds(320, 333, 640, 38);
-		
+		progressBarTimeShift.setBounds(320, 600, 640, 38);
+		progressBarTimeShift.setVisible(false);
+		panelMainScreen.add(progressBarTimeShift);
 		
 		panelScreenEPG = new JPanel();
 		panelScreenEPG.setBackground(new Color(164, 164, 164));
@@ -347,6 +348,14 @@ public class Screen {
 	
 	public void setMainLabel(JLabel picLabelMain){
 		this.picLabelMain = picLabelMain;
+	}
+	
+	public JProgressBar getProgressBar(){
+		return progressBarTimeShift;
+	}
+	
+	public void setProgressBarValue(int bar){
+		(this.progressBarTimeShift).setValue(bar);
 	}
 
 	public void changePicture(String channelPicturePath, boolean choosePiP)

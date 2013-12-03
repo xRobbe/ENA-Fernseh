@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import java.io.IOException;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -42,7 +43,7 @@ public class RemoteControl {
 	private JToggleButton btnRemotePiPSwitch;
 	private JButton btnRemotePiPActivate;
 	private JButton btnRemoteTimeshiftStop;
-	private JButton btnRemoteTimeshiftPlayPause;
+	private JToggleButton btnRemoteTimeshiftPlayPause;
 	private JButton btnRemoteTimeshiftForwards;
 
 	/**
@@ -261,16 +262,30 @@ public class RemoteControl {
 			btnRemoteTimeshiftStop.setBounds(10, 552, 77, 77);
 			panelRemoteControl.add(btnRemoteTimeshiftStop);
 			// TimeShift Play/Pause Button
-			btnRemoteTimeshiftPlayPause = new JButton();
-			btnRemoteTimeshiftPlayPause.setSelectedIcon(new ImageIcon(
-					RemoteControl.class.getResource("/picture/p_play.png")));
+			btnRemoteTimeshiftPlayPause = new JToggleButton();
 			btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(
 					RemoteControl.class.getResource("/picture/p_paus.png")));
 			btnRemoteTimeshiftPlayPause.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(
-							RemoteControl.class
-									.getResource("/picture/p_play.png")));
+					try {
+						if (screen == null)
+							System.out.println("Kein Screen für die Aufnahme vorhanden.");
+						else {
+							if (btnRemoteTimeshiftPlayPause.isSelected()) {
+								btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(
+										RemoteControl.class
+												.getResource("/picture/p_play.png")));
+								electronics.recordTimeShift(true, btnRemoteTimeshiftPlayPause);
+							} else {
+								btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(
+										RemoteControl.class
+												.getResource("/picture/p_paus.png")));
+								electronics.recordTimeShift(false, btnRemoteTimeshiftPlayPause);
+							}
+						}
+					} catch (Exception e6) {
+						e6.printStackTrace();
+					}
 				}
 			});
 			btnRemoteTimeshiftPlayPause.setFocusPainted(false);
