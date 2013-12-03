@@ -28,6 +28,9 @@ import javax.swing.JProgressBar;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
+import java.awt.Graphics2D;
+import java.awt.Graphics;
+import java.awt.RenderingHints;
 
 public class Screen {
 
@@ -36,10 +39,12 @@ public class Screen {
 	private JPanel panelMainScreen;
 	private JProgressBar progressBarScreenWelcome;
 	private TvElectronics electronics;
+	private Persistent persisten;
 
 	private JLabel lblEPG = new JLabel("Channel");
 
-	public Screen() {
+	public Screen(Persistent persistent) {
+		this.persisten = persistent;
 		initialize();
 	}
 
@@ -194,24 +199,36 @@ public class Screen {
 		
 		BufferedImage myPicture;
 		try {
-			myPicture = ImageIO.read(new File("src/television/kika.jpg"));
+			myPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
+			myPicture = resize(myPicture,(int)(myPicture.getWidth()*1.333333),(int)(myPicture.getHeight()*1.333333));
 			JLabel picLabel = new JLabel(new ImageIcon(myPicture));
 			picLabel.setBounds(0, 0, 1280, 720);
 			picLabel.setOpaque(true);
+			picLabel.setVisible(true);
 			panelMainScreen.add(picLabel);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
+		
 		if(electronics == null){
-			electronics = new TvElectronics(panelMainScreen, panelScreenPiP);
+			electronics = new TvElectronics(panelMainScreen, panelScreenPiP, persisten);
 			System.out.println("TvElectronics wurde erstellt");
 		}
 		else
-			System.out.println("TvElectronics ist schon vorhandne");
-		
+			System.out.println("TvElectronics ist schon vorhanden");
 	}
+	
+	  public BufferedImage resize(BufferedImage img, int newW, int newH) {
+  		  int w = img.getWidth();
+  		  int h = img.getHeight();
+  		  BufferedImage dimg = new BufferedImage(newW, newH, img.getType());
+  		  Graphics2D g = dimg.createGraphics();
+  		  g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+  		  g.drawImage(img, 0, 0, newW, newH, 0, 0, w, h, null);
+  		  g.dispose();
+  		  return dimg;
+  	 }
 	
 	public TvElectronics getElectronics(){
 		return electronics;
@@ -260,6 +277,10 @@ public class Screen {
 
 	public void setLabel(String sName) {
 		lblEPG.setText(sName);
+	}
+	
+	public JLabel getLabel(){
+		return lblEPG;
 	}
 
 	public void setVisible(boolean visible) {
