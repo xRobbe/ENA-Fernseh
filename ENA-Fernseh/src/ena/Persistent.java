@@ -1,297 +1,111 @@
 package ena;
 
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import java.awt.Color;
-
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
-import javax.swing.JList;
-import javax.swing.AbstractListModel;
-
-import java.awt.Font;
-
-import javax.swing.JButton;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
-import java.awt.BorderLayout;
-
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.JProgressBar;
-
-import java.awt.Rectangle;
 import java.io.File;
-import java.io.IOException;
-import java.awt.Graphics2D;
-import java.awt.Graphics;
-import java.awt.RenderingHints;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Properties;
 
-public class Screen {
+public class Persistent {
+        private final static String Filepath = "config.properties";
+        private final static String STATION = "Station";
+        private final static String VOLUME = "Volume";
+        private final static String RATIO = "Ratio";
+        private final static String USERMODE = "Usermode";
+        private final static int MAX_VOLUME = 100;
+        private final static int MAX_USERMODE = 2;
+        private final static int MAX_RATIO = 2;
+        
+        private Properties properties = new Properties();
+        private String config = Filepath;
+        private FileInputStream in;
 
-	private JFrame frame;
-	private JPanel panelWelcome;
-	private JPanel panelMainScreen;
-	private JProgressBar progressBarScreenWelcome;
-	private TvElectronics electronics;
-	private Persistent persisten;
+        public Persistent() {
+                try {
+                        if (!((new File(Filepath)).exists()))
+                                new FileOutputStream(config);
 
-	private JLabel lblEPG = new JLabel("Channel");
+                        in = new FileInputStream(config);
+                        properties.load(in);
 
-	public Screen(Persistent persistent) {
-		this.persisten = persistent;
-		initialize();
-	}
+                        if (!(checkConfig())) {
+                                properties.setProperty(VOLUME, "50");
+                                properties.setProperty(STATION, "1");
+                                properties.setProperty(USERMODE, "0");
+                                properties.setProperty(RATIO, "0");
+                                properties.store(out(), null);
+                        }
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+        }
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.getContentPane().setBackground(Color.BLACK);
-		frame.setBounds(0, 0, 1286, 746);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		frame.setResizable(false);
-		panelWelcome = new JPanel();
-		panelWelcome.setBounds(0, 0, 1280, 720);
-		frame.getContentPane().add(panelWelcome);
-		panelWelcome.setLayout(null);
+        public void setVolume(int volume) throws Exception {
+                properties.setProperty(VOLUME, String.valueOf(volume));
+                properties.store(out(), null);
+        }
 
-		JLabel lblScreenWelcomeMessage = new JLabel("Welcome");
-		lblScreenWelcomeMessage.setFont(new Font("Tahoma", Font.BOLD, 50));
-		lblScreenWelcomeMessage.setBounds(440, 98, 400, 100);
-		lblScreenWelcomeMessage.setHorizontalAlignment(SwingConstants.CENTER);
-		panelWelcome.add(lblScreenWelcomeMessage);
+        public int getVolume() throws Exception {
+                return Integer.parseInt(properties.getProperty(VOLUME));
+        }
 
-		progressBarScreenWelcome = new JProgressBar();
-		progressBarScreenWelcome.setBounds(320, 333, 640, 38);
-		panelWelcome.add(progressBarScreenWelcome);
+        public void setProgramm(int programm) throws Exception {
+                properties.setProperty(STATION, String.valueOf(programm));
+                properties.store(out(), null);
+        }
 
-		JLabel lblScreenWelcomeStatus = new JLabel("Your TV is getting ready");
-		lblScreenWelcomeStatus.setFont(new Font("Tahoma", Font.PLAIN, 50));
-		lblScreenWelcomeStatus.setHorizontalAlignment(SwingConstants.CENTER);
-		lblScreenWelcomeStatus.setBounds(320, 223, 640, 63);
-		panelWelcome.add(lblScreenWelcomeStatus);
+        public int getProgramm() throws Exception {
+                return Integer.parseInt(properties.getProperty(STATION));
+        }
 
-		JButton btnScreenWelcomeDebugDone = new JButton("Done");
-		btnScreenWelcomeDebugDone.addActionListener(new RunnableActionListener() {
-			public void run() {
-				while (progressBarScreenWelcome.getValue() < progressBarScreenWelcome.getMaximum()) {
-					progressBarScreenWelcome.setValue(progressBarScreenWelcome.getValue() + 1);
-					try {
-						Thread.sleep(30);
-					} catch (InterruptedException ie) {
-						ie.printStackTrace();
-					}
-				}
-				panelWelcome.setVisible(false);
-				panelMainScreen.setVisible(true);
-			}
-		});
-		btnScreenWelcomeDebugDone.setBounds(575, 437, 89, 23);
-		panelWelcome.add(btnScreenWelcomeDebugDone);
+        public void setUsermode(int usermode) throws Exception {
+                properties.setProperty(USERMODE, String.valueOf(usermode));
+                properties.store(out(), null);
+        }
 
-		panelMainScreen = new JPanel();
-		panelMainScreen.setVisible(false);
-		panelMainScreen.setBackground(new Color(0, 0, 0));
-		panelMainScreen.setBounds(0, 0, 1280, 720);
-		frame.getContentPane().add(panelMainScreen);
-		panelMainScreen.setLayout(null);
+        public int getUsermode() throws Exception {
+                return Integer.parseInt(properties.getProperty(USERMODE));
+        }
 
-		final JPanel panelScreenEPG = new JPanel();
-		panelScreenEPG.setBackground(new Color(164, 164, 164));
-		panelScreenEPG.setBounds(256, 720, 768, 128);
-		panelMainScreen.add(panelScreenEPG);
-		panelScreenEPG.setVisible(false);
-		panelScreenEPG.setLayout(new BorderLayout(0, 0));
-		lblEPG.setForeground(Color.BLACK);
-		panelScreenEPG.add(lblEPG, BorderLayout.CENTER);
-		lblEPG.setFont(new Font("Tahoma", Font.BOLD, 40));
-		lblEPG.setHorizontalAlignment(SwingConstants.CENTER);
+        public void setRatio(int ratio) throws Exception {
+                properties.setProperty(RATIO, String.valueOf(ratio));
+                properties.store(out(), null);
+        }
 
-		final JPanel panelScreenPiP = new JPanel();
-		panelScreenPiP.setBounds(886, 11, 384, 216);
-		panelMainScreen.add(panelScreenPiP);
-		panelScreenPiP.setVisible(false);
-		panelScreenPiP.setLayout(null);
+        public int getRatio() throws Exception {
+                return Integer.parseInt(properties.getProperty(RATIO));
+        }
 
-		final JScrollPane scrollPaneScreenStations = new JScrollPane();
-		scrollPaneScreenStations.setBorder(null);
-		scrollPaneScreenStations.setBackground(new Color(0, 0, 0));
-		scrollPaneScreenStations.setBounds(new Rectangle(-256, 0, 256, 720));
-		panelMainScreen.add(scrollPaneScreenStations);
+        private boolean checkConfig() {
+                if (!(properties.containsKey(VOLUME)))
+                        return false;
+                if (Integer.parseInt(properties.getProperty(VOLUME)) > MAX_VOLUME)
+                        return false;
+                if (Integer.parseInt(properties.getProperty(VOLUME)) < 0)
+                        return false;
 
-		final JList<String> listScreenStations = new JList<String>();
-		listScreenStations.setForeground(new Color(216, 0, 116));
-		listScreenStations.setBackground(new Color(164, 164, 164));
-		listScreenStations.setBorder(null);
-		scrollPaneScreenStations.setViewportView(listScreenStations);
-		listScreenStations.setFont(new Font("Tahoma", Font.BOLD, 20));
-		listScreenStations.setModel(new AbstractListModel<String>() {
-			String[] values = new String[] { "1 ARD", "2 ZDF", "3 RTL",
-					"4 SAT1", "5 PRO7", "6 RTL2", "7 SUPER RTL", "8 KIKA",
-					"9 ARTE", "10 Comedy Central", "11 Nickelodeon",
-					"12 Kabel 1", "13 VOX", "14 MTV", "15 VIVA", "16 NTV",
-					"17 N24", "18 HR3", "19 123TV", "20 MotorvisionTV",
-					"21 Sport 1", "22 DMAX", "23 ASTRA TV", "24 ", "25", "26",
-					"27", "28", "29", "30" };
+                if (!(properties.containsKey(STATION)))
+                        return false;
+                if (Integer.parseInt(properties.getProperty(STATION)) < 0)
+                        return false;
 
-			public int getSize() {
-				return values.length;
-			}
+                if (!(properties.containsKey(USERMODE)))
+                        return false;
+                if (Integer.parseInt(properties.getProperty(USERMODE)) > MAX_USERMODE)
+                        return false;
+                if (Integer.parseInt(properties.getProperty(USERMODE)) < 0)
+                        return false;
 
-			public String getElementAt(int index) {
-				return values[index];
-			}
-		});
+                if (!(properties.containsKey(RATIO)))
+                        return false;
+                if (Integer.parseInt(properties.getProperty(RATIO)) > MAX_RATIO)
+                        return false;
+                if (Integer.parseInt(properties.getProperty(RATIO)) < 0)
+                        return false;
+                
+                return true;
+        }
 
-		JButton btnSenderliste = new JButton("Senderliste");
-		btnSenderliste.setBounds(377, 293, 85, 23);
-		panelMainScreen.add(btnSenderliste);
-
-		JButton btnEpg = new JButton("EPG");
-		btnEpg.setBounds(377, 327, 85, 23);
-		panelMainScreen.add(btnEpg);
-
-		JButton btnPip = new JButton("PiP");
-		btnPip.setBounds(377, 361, 85, 23);
-		panelMainScreen.add(btnPip);
-		btnPip.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (panelScreenPiP.isVisible())
-					panelScreenPiP.setVisible(false);
-				else
-					panelScreenPiP.setVisible(true);
-			}
-		});
-		btnEpg.addActionListener(new RunnableActionListener() {
-			public void run() {
-				try {
-					scrollPanelY(panelScreenEPG, 720, 592);
-				} catch (InterruptedException ie) {
-					ie.printStackTrace();
-				}
-			}
-
-			public void actionPerformed(ActionEvent e) {
-				new Thread(this).start();
-			}
-		});
-		btnSenderliste.addActionListener(new RunnableActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				new Thread(this).start();
-			}
-
-			public void run() {
-				try {
-					scrollPanelX(scrollPaneScreenStations, 0, -256);
-				} catch (InterruptedException ie) {
-					ie.printStackTrace();
-				}
-			}
-		});
-		
-		BufferedImage myPicture;
-		try {
-			myPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
-			myPicture = resize(myPicture,(int)(myPicture.getWidth()*1.333333),(int)(myPicture.getHeight()*1.333333));
-			JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-			picLabel.setBounds(0, 0, 1280, 720);
-			picLabel.setOpaque(true);
-			picLabel.setVisible(true);
-			panelMainScreen.add(picLabel);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
-		
-		if(electronics == null){
-			electronics = new TvElectronics(panelMainScreen, panelScreenPiP, persisten);
-			System.out.println("TvElectronics wurde erstellt");
-		}
-		else
-			System.out.println("TvElectronics ist schon vorhanden");
-	}
-	
-	  public BufferedImage resize(BufferedImage img, int newW, int newH) {
-  		  int w = img.getWidth();
-  		  int h = img.getHeight();
-  		  BufferedImage dimg = new BufferedImage(newW, newH, img.getType());
-  		  Graphics2D g = dimg.createGraphics();
-  		  g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-  		  g.drawImage(img, 0, 0, newW, newH, 0, 0, w, h, null);
-  		  g.dispose();
-  		  return dimg;
-  	 }
-	
-	public TvElectronics getElectronics(){
-		return electronics;
-	}
-	
-	private void scrollPanelY(JComponent panel, int max, int min)
-			throws InterruptedException {
-		int time = 300 / Math.abs(max - min);
-		if (panel.getBounds().y == max) {
-			panel.setVisible(true);
-			while (panel.getBounds().y > min) {
-				panel.setBounds(panel.getBounds().x, panel.getBounds().y - 1,
-						panel.getBounds().width, panel.getBounds().height);
-				Thread.sleep(time);
-
-			}
-		} else if (panel.getBounds().y == min) {
-			while (panel.getBounds().y < max) {
-				panel.setBounds(panel.getBounds().x, panel.getBounds().y + 1,
-						panel.getBounds().width, panel.getBounds().height);
-				Thread.sleep(time);
-			}
-			panel.setVisible(false);
-		}
-	}
-
-	private void scrollPanelX(JComponent panel, int max, int min)
-			throws InterruptedException {
-		int time = 300 / Math.abs(max - min);
-		if (panel.getBounds().x == max) {
-			while (panel.getBounds().x > min) {
-				panel.setBounds(panel.getBounds().x - 1, panel.getBounds().y,
-						panel.getBounds().width, panel.getBounds().height);
-				Thread.sleep(time);
-			}
-			panel.setVisible(false);
-		} else if (panel.getBounds().x == min) {
-			panel.setVisible(true);
-			while (panel.getBounds().x < max) {
-				panel.setBounds(panel.getBounds().x + 1, panel.getBounds().y,
-						panel.getBounds().width, panel.getBounds().height);
-				Thread.sleep(time);
-			}
-		}
-	}
-
-	public void setLabel(String sName) {
-		lblEPG.setText(sName);
-	}
-	
-	public JLabel getLabel(){
-		return lblEPG;
-	}
-
-	public void setVisible(boolean visible) {
-		frame.setVisible(visible);
-	}
-
-	public boolean isVisible() {
-		return frame.isVisible();
-	}
-
-	public void dispose() {
-		frame.dispose();
-	}
+        private FileOutputStream out() throws Exception {
+                return new FileOutputStream(config);
+        }
 }
