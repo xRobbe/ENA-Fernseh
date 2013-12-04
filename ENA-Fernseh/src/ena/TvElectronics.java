@@ -171,10 +171,11 @@ public class TvElectronics {
 				panelMainScreen.add(picLabelMain);
 				panelMainScreen.repaint();
 			} else {
-				panelMainScreen.remove(picLabelMain);
 				myPicture = ImageIO.read(new File(channelPicPath));
+				panelMainScreen.remove(picLabelMain);
 				picLabelMain = new JLabel(new ImageIcon(myPicture));
 				picLabelMain.setBounds(0, 0, 1280, 720);
+				screen.setMainLabel(picLabelMain);
 				panelMainScreen.add(picLabelMain);
 				panelMainScreen.repaint();
 			}

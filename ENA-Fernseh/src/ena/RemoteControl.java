@@ -199,7 +199,7 @@ public class RemoteControl {
 										String.valueOf(tableRemoteStations.getValueAt(
 												tableRemoteStations.getSelectedRow(), 1)), screen,
 										channelList.get(tableRemoteStations.getSelectedRow()).getChannelPicturePath());
-								if ((persistent.getRatio() == 1) || (persistent.getRatio() == 1))
+								if ((persistent.getRatio() == 1) || (persistent.getRatio() == 2))
 									electronics.setZoom(true);
 								// screen.changePicture(channelList.get(
 								// tableRemoteStations.getSelectedRow())
