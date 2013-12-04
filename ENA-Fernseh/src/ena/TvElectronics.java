@@ -51,8 +51,7 @@ public class TvElectronics {
 	 * @param pipDisplay
 	 *            dieses Panel repräsentiert das PictureInPicture-Display
 	 */
-	TvElectronics(JPanel mainDisplay, JPanel pipDisplay, Persistent persistent,
-			Screen screen) {
+	TvElectronics(JPanel mainDisplay, JPanel pipDisplay, Persistent persistent, Screen screen) {
 		this.mainDisplay = mainDisplay;
 		this.pipDisplay = pipDisplay;
 		this.isRecording = false;
@@ -97,20 +96,17 @@ public class TvElectronics {
 	 * @throws Exception
 	 *             wenn der Wert von "channel" nicht gültig ist
 	 */
-	public void setChannel(String channel, boolean forPiP, String channelName,
-			Screen screen, String channelList) throws Exception {
+	public void setChannel(String channel, boolean forPiP, String channelName, Screen screen, String channelList)
+			throws Exception {
 		String errmsg = "Illegal format for channel: " + channel;
 		int channelNumber;
 		try {
-			channelNumber = Integer.parseInt(channel.substring(0,
-					channel.length() - 1));
+			channelNumber = Integer.parseInt(channel.substring(0, channel.length() - 1));
 		} catch (NumberFormatException n) {
 			throw new Exception(errmsg);
 		}
-		String subChannel = channel.substring(channel.length() - 1,
-				channel.length());
-		if (channelNumber < 1 || channelNumber > 99
-				|| new String("abcd").indexOf(subChannel) < 0)
+		String subChannel = channel.substring(channel.length() - 1, channel.length());
+		if (channelNumber < 1 || channelNumber > 99 || new String("abcd").indexOf(subChannel) < 0)
 			throw new Exception(errmsg);
 		System.out.println((forPiP ? "PiP" : "Main") + " channel = " + channel);
 
@@ -165,8 +161,7 @@ public class TvElectronics {
 		try {
 			if (on) {
 				myPicture = ImageIO.read(new File(channelPicPath));
-				myPicture = resize(myPicture,
-						(int) (myPicture.getWidth() * 1.333333),
+				myPicture = resize(myPicture, (int) (myPicture.getWidth() * 1.333333),
 						(int) (myPicture.getHeight() * 1.333333));
 				panelMainScreen.remove(picLabelMain);
 				picLabelMain = new JLabel(new ImageIcon(myPicture));
@@ -215,33 +210,30 @@ public class TvElectronics {
 	 * @throws Exception
 	 *             wenn der Wert von "start" nicht zum aktuellen Zustand passt
 	 */
-	public void recordTimeShift(boolean start, final JToggleButton play,
-			final Screen screen) throws Exception {
+	public void recordTimeShift(boolean start, final JToggleButton play, final Screen screen) throws Exception {
 		if (this.isRecording == start)
-			throw new Exception("TimeShift is already "
-					+ (this.isRecording ? "recording" : "stopped"));
+			throw new Exception("TimeShift is already " + (this.isRecording ? "recording" : "stopped"));
 		if (!start) {
 			this.playTimeShift(false, 0);
 		} else {
 			(screen.getProgressBar()).setVisible(true);
-			new Thread(new Runnable() {
+			Thread progress = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					while (((screen.getProgressBar()).getValue() < (screen
-							.getProgressBar()).getMaximum())
+					while (((screen.getProgressBar()).getValue() < (screen.getProgressBar()).getMaximum())
 							&& (play.isSelected())) {
-						(screen.getProgressBar()).setValue((screen
-								.getProgressBar()).getValue() + 1);
+						(screen.getProgressBar()).setValue((screen.getProgressBar()).getValue() + 1);
 						try {
-							screen.setProgressBarValue((screen.getProgressBar())
-									.getValue());
+							screen.setProgressBarValue((screen.getProgressBar()).getValue());
 							Thread.sleep(30);
 						} catch (InterruptedException ie) {
 							ie.printStackTrace();
 						}
 					}
 				}
-			}).start();
+			});
+			progress.start();
+			screen.setTimeshiftThread(progress);
 		}
 		this.isRecording = start;
 		this.recordingStartTime = now();
@@ -264,15 +256,9 @@ public class TvElectronics {
 		if (start && !this.isRecording)
 			throw new Exception("TimeShift is not recording");
 		if (start && this.recordingStartTime + offset > now())
-			throw new Exception("TimeShift has not yet buffered " + offset
-					+ " seconds");
+			throw new Exception("TimeShift has not yet buffered " + offset + " seconds");
 		System.out.println((start ? "Start" : "Stop") + " timeshift playing"
 				+ (start ? " (offset " + offset + " seconds)" : ""));
-	}
-
-	public void stopTimeshift(Screen screen) {
-		screen.setProgressBarValue(0);
-		(screen.getProgressBar()).setVisible(false);
 	}
 
 	public BufferedImage resize(BufferedImage img, int newW, int newH) {
@@ -280,11 +266,14 @@ public class TvElectronics {
 		int h = img.getHeight();
 		BufferedImage dimg = new BufferedImage(newW, newH, img.getType());
 		Graphics2D g = dimg.createGraphics();
-		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		g.drawImage(img, 0, 0, newW, newH, 0, 0, w, h, null);
 		g.dispose();
 		return dimg;
+	}
+	
+	public void setIsRecording(){
+		isRecording = false;
 	}
 
 	// ======================================================================================================

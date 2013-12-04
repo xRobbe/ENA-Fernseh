@@ -44,6 +44,7 @@ public class Screen {
 	private JLabel picLabelMain;
 	private JLabel picLabelPiP;
 	private JPanel panelScreenPiP;
+	private Thread timeshiftThread;
 
 	private JLabel lblEPG = new JLabel("Das Erste");
 	private JPanel panelScreenEPG;
@@ -339,6 +340,21 @@ public class Screen {
 
 	public void setProgressBarValue(int bar) {
 		(this.progressBarTimeShift).setValue(bar);
+	}
+	
+	public void setTimeshiftThread(Thread timeshiftThread){
+		this.timeshiftThread = timeshiftThread;
+	}
+	
+	public Thread getTimeshiftThread(){
+		return timeshiftThread;
+	}
+	
+	public void setProgressBar(JProgressBar progressBarTimeShift){
+		this.progressBarTimeShift = progressBarTimeShift;
+		progressBarTimeShift.setBounds(320, 600, 640, 38);
+		progressBarTimeShift.setVisible(false);
+		panelMainScreen.add(progressBarTimeShift);
 	}
 
 	// das Bild in dem Haupt- oder PiP-Fenster ändern

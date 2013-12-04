@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JLabel;
@@ -21,8 +22,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import java.io.IOException;
 
+import java.io.IOException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -93,8 +94,7 @@ public class RemoteControl {
 			panelRemoteControl.setLayout(null);
 			// Power Button
 			JButton btnRemotePower = new JButton();
-			btnRemotePower.setIcon(new ImageIcon(RemoteControl.class
-					.getResource("/picture/p_OnOff.png")));
+			btnRemotePower.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_OnOff.png")));
 			// Erstellt den Bildschirm und TvElectronics
 			btnRemotePower.addActionListener(new RunnableActionListener() {
 				public void run() {
@@ -114,8 +114,7 @@ public class RemoteControl {
 			panelRemoteControl.add(btnRemotePower);
 			// Pip Switch Button
 			btnRemotePiPSwitch = new JToggleButton();
-			btnRemotePiPSwitch.setIcon(new ImageIcon(RemoteControl.class
-					.getResource("/picture/p_PiPch.png")));
+			btnRemotePiPSwitch.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_PiPch.png")));
 			btnRemotePiPSwitch.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (btnRemotePiPSwitch.isSelected())
@@ -125,14 +124,12 @@ public class RemoteControl {
 				}
 			});
 			btnRemotePiPSwitch.setFocusPainted(false);
-			btnRemotePiPSwitch
-					.setToolTipText("Switch Picture in Picture Screen");
+			btnRemotePiPSwitch.setToolTipText("Switch Picture in Picture Screen");
 			btnRemotePiPSwitch.setBounds(184, 10, 77, 77);
 			panelRemoteControl.add(btnRemotePiPSwitch);
 			// PiP Activation Button
 			btnRemotePiPActivate = new JButton();
-			btnRemotePiPActivate.setIcon(new ImageIcon(RemoteControl.class
-					.getResource("/picture/p_PiP.png")));
+			btnRemotePiPActivate.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_PiP.png")));
 			btnRemotePiPActivate.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (electronics == null)
@@ -156,26 +153,22 @@ public class RemoteControl {
 			panelRemoteControl.add(btnRemotePiPActivate);
 			// Settings Button
 			JButton btnRemoteSettings = new JButton();
-			btnRemoteSettings.setIcon(new ImageIcon(RemoteControl.class
-					.getResource("/picture/p_options.png")));
-			btnRemoteSettings.setSelectedIcon(new ImageIcon(RemoteControl.class
-					.getResource("/picture/p_options.png")));
+			btnRemoteSettings.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_options.png")));
+			btnRemoteSettings.setSelectedIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_options.png")));
 			// übergibt Screen, Persistent, TvElectronics und RemoteControl an
 			// Settings
 			btnRemoteSettings.addActionListener(new RunnableActionListener() {
 				public void run() {
 					if (screen != null) {
 						if (settings == null) {
-							settings = new Settings(window, persistent,
-									electronics, screen);
+							settings = new Settings(window, persistent, electronics, screen);
 							settings.setVisible(true);
 						} else {
 							if (settings.isVisible()) {
 								settings.setVisible(false);
 								settings.dispose();
 							} else {
-								settings = new Settings(window, persistent,
-										electronics, screen);
+								settings = new Settings(window, persistent, electronics, screen);
 								settings.setVisible(true);
 							}
 						}
@@ -200,20 +193,13 @@ public class RemoteControl {
 						if (screen != null) {
 							if (screen.isVisible()) {
 								electronics.setChannel(
-										String.valueOf(tableRemoteStations
-												.getValueAt(tableRemoteStations
-														.getSelectedRow(), 0)),
+										String.valueOf(tableRemoteStations.getValueAt(
+												tableRemoteStations.getSelectedRow(), 0)),
 										switchActive,
-										String.valueOf(tableRemoteStations
-												.getValueAt(tableRemoteStations
-														.getSelectedRow(), 1)),
-										screen,
-										channelList.get(
-												tableRemoteStations
-														.getSelectedRow())
-												.getChannelPicturePath());
-								if ((persistent.getRatio() == 1)
-										|| (persistent.getRatio() == 1))
+										String.valueOf(tableRemoteStations.getValueAt(
+												tableRemoteStations.getSelectedRow(), 1)), screen,
+										channelList.get(tableRemoteStations.getSelectedRow()).getChannelPicturePath());
+								if ((persistent.getRatio() == 1) || (persistent.getRatio() == 1))
 									electronics.setZoom(true);
 								// screen.changePicture(channelList.get(
 								// tableRemoteStations.getSelectedRow())
@@ -237,30 +223,32 @@ public class RemoteControl {
 			});
 			tableRemoteStations.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			tableRemoteStations.setAutoCreateRowSorter(true);
-			tableRemoteStations
-					.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			tableRemoteStations
-					.setModel(new ChannelTableModelList(channelList));
+			tableRemoteStations.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			tableRemoteStations.setModel(new ChannelTableModelList(channelList));
 			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 			centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 			tableRemoteStations.setRowSelectionInterval(0, 0);
-			tableRemoteStations.getColumnModel().getColumn(0)
-					.setPreferredWidth(70);
+			tableRemoteStations.getColumnModel().getColumn(0).setPreferredWidth(70);
 			tableRemoteStations.getColumnModel().getColumn(0).setMinWidth(70);
 			tableRemoteStations.getColumnModel().getColumn(0).setMaxWidth(70);
 			tableRemoteStations.setRowHeight(31);
-			tableRemoteStations.getColumnModel().getColumn(0)
-					.setCellRenderer(centerRenderer);
-			tableRemoteStations.getColumnModel().getColumn(1)
-					.setPreferredWidth(250);
+			tableRemoteStations.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+			tableRemoteStations.getColumnModel().getColumn(1).setPreferredWidth(250);
 			tableRemoteStations.getColumnModel().getColumn(1).setMinWidth(200);
 			scrollPaneRemoteStations.setViewportView(tableRemoteStations);
 			// TimeShift Stop Button
 			btnRemoteTimeshiftStop = new JButton();
-			btnRemoteTimeshiftStop.setIcon(new ImageIcon(RemoteControl.class
-					.getResource("/picture/p_stop.png")));
+			btnRemoteTimeshiftStop.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_stop.png")));
 			btnRemoteTimeshiftStop.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					// screen.getTimeshiftThread().interrupt();
+					(screen.getPanelMain()).remove(screen.getProgressBar());
+					electronics.setIsRecording();
+					btnRemoteTimeshiftPlayPause.setSelected(false);
+					btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class
+							.getResource("/picture/p_paus.png")));
+					(screen.getPanelMain()).repaint();
+					screen.setProgressBar(new JProgressBar());
 				}
 			});
 			btnRemoteTimeshiftStop.setFocusPainted(false);
@@ -271,28 +259,22 @@ public class RemoteControl {
 			// benutzt die Funktion recordTimeShift von TvElectronics
 			// lässt in dem Fernseher ein ProgressBar erscheinen
 			btnRemoteTimeshiftPlayPause = new JToggleButton();
-			btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(
-					RemoteControl.class.getResource("/picture/p_paus.png")));
+			btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_paus.png")));
 			btnRemoteTimeshiftPlayPause.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						if (screen == null){
-							System.out
-									.println("Kein Screen für die Aufnahme vorhanden.");
+						if (screen == null) {
+							System.out.println("Kein Screen für die Aufnahme vorhanden.");
 							btnRemoteTimeshiftPlayPause.setSelected(false);
 						} else {
 							if (btnRemoteTimeshiftPlayPause.isSelected()) {
-								btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(
-										RemoteControl.class
-												.getResource("/picture/p_play.png")));
-								electronics.recordTimeShift(true,
-										btnRemoteTimeshiftPlayPause, screen);
+								btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class
+										.getResource("/picture/p_play.png")));
+								electronics.recordTimeShift(true, btnRemoteTimeshiftPlayPause, screen);
 							} else {
-								btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(
-										RemoteControl.class
-												.getResource("/picture/p_paus.png")));
-								electronics.recordTimeShift(false,
-										btnRemoteTimeshiftPlayPause, screen);
+								btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class
+										.getResource("/picture/p_paus.png")));
+								electronics.recordTimeShift(false, btnRemoteTimeshiftPlayPause, screen);
 							}
 						}
 					} catch (Exception e6) {
@@ -306,8 +288,7 @@ public class RemoteControl {
 			panelRemoteControl.add(btnRemoteTimeshiftPlayPause);
 			// TimeShift Forward Button
 			btnRemoteTimeshiftForwards = new JButton();
-			btnRemoteTimeshiftForwards.setIcon(new ImageIcon(
-					RemoteControl.class.getResource("/picture/p_ffarw.png")));
+			btnRemoteTimeshiftForwards.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_ffarw.png")));
 			btnRemoteTimeshiftForwards.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 				}
@@ -333,21 +314,16 @@ public class RemoteControl {
 			panelRemoteControl.add(sliderRemoteVolume);
 			// Volume Down Button
 			JButton btnRemoteVolumeDown = new JButton();
-			btnRemoteVolumeDown.setIcon(new ImageIcon(RemoteControl.class
-					.getResource("/picture/p_volD.png")));
+			btnRemoteVolumeDown.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_volD.png")));
 			// ruft die Funktion setVolume von TvElectronics auf
 			btnRemoteVolumeDown.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						if (sliderRemoteVolume.getMinimum() < sliderRemoteVolume
-								.getValue()) {
+						if (sliderRemoteVolume.getMinimum() < sliderRemoteVolume.getValue()) {
 							if (electronics != null)
-								electronics.setVolume(
-										sliderRemoteVolume.getValue() - 1,
-										sliderRemoteVolume);
+								electronics.setVolume(sliderRemoteVolume.getValue() - 1, sliderRemoteVolume);
 							else
-								System.out
-										.println("Keine TvElectronics erstellt");
+								System.out.println("Keine TvElectronics erstellt");
 						}
 					} catch (Exception e6) {
 						e6.printStackTrace();
@@ -360,21 +336,16 @@ public class RemoteControl {
 			panelRemoteControl.add(btnRemoteVolumeDown);
 			// Volume Up Button
 			JButton btnRemoteVolumeUp = new JButton();
-			btnRemoteVolumeUp.setIcon(new ImageIcon(RemoteControl.class
-					.getResource("/picture/p_volU.png")));
+			btnRemoteVolumeUp.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_volU.png")));
 			// ruft die Funktion setVolume von TvElectronics auf
 			btnRemoteVolumeUp.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
-						if (sliderRemoteVolume.getMaximum() > sliderRemoteVolume
-								.getValue()) {
+						if (sliderRemoteVolume.getMaximum() > sliderRemoteVolume.getValue()) {
 							if (electronics != null)
-								electronics.setVolume(
-										sliderRemoteVolume.getValue() + 1,
-										sliderRemoteVolume);
+								electronics.setVolume(sliderRemoteVolume.getValue() + 1, sliderRemoteVolume);
 							else
-								System.out
-										.println("Keine TvElectronics erstellt");
+								System.out.println("Keine TvElectronics erstellt");
 						}
 					} catch (Exception e5) {
 						e5.printStackTrace();
@@ -385,7 +356,7 @@ public class RemoteControl {
 			btnRemoteVolumeUp.setToolTipText("Increase Volume");
 			btnRemoteVolumeUp.setBounds(323, 516, 25, 25);
 			panelRemoteControl.add(btnRemoteVolumeUp);
-			
+
 			JPanel panelRemoteSettings = new JPanel();
 			panelRemoteSettings.setBounds(0, 0, 360, 640);
 			frame.getContentPane().add(panelRemoteSettings);
