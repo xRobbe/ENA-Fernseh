@@ -291,6 +291,21 @@ public class RemoteControl {
 			btnRemoteTimeshiftForwards.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_ffarw.png")));
 			btnRemoteTimeshiftForwards.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					screen.getTimeshiftThread().stop();
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							while ((electronics.getProgressBar()).getValue() < (electronics.getProgressBar()).getMaximum()) {
+								(electronics.getProgressBar()).setValue((electronics.getProgressBar()).getValue() + 1);
+								try {
+									electronics.setProgressBarValue((electronics.getProgressBar()).getValue());
+									Thread.sleep(30);
+								} catch (InterruptedException ie) {
+									ie.printStackTrace();
+								}
+							}
+						}
+					});
 				}
 			});
 			btnRemoteTimeshiftForwards.setFocusPainted(false);

@@ -240,6 +240,14 @@ public class TvElectronics {
 		this.recordingStartTime = now();
 		System.out.println((start ? "Start" : "Stop") + " timeshift recording");
 	}
+	
+	public JProgressBar getProgressBar(){
+		return screen.getProgressBar();
+	}
+	
+	public void setProgressBarValue(int a){
+		screen.setProgressBarValue(a);
+	}
 
 	/**
 	 * Startet die Wiedergabe vom TimeShift-Recorder bzw. beendet sie wieder.
