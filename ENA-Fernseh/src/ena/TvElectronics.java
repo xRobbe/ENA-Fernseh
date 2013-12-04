@@ -6,6 +6,7 @@ import java.util.Calendar;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JLabel;
@@ -171,6 +172,7 @@ public class TvElectronics {
 				picLabelMain = new JLabel(new ImageIcon(myPicture));
 				picLabelMain.setBounds(0, 0, 1280, 720);
 				screen.setMainLabel(picLabelMain);
+				screen.scrollPanelY(screen.getMainLabel(), 720, 592);
 				panelMainScreen.add(picLabelMain);
 				panelMainScreen.repaint();
 			} else {
@@ -183,6 +185,8 @@ public class TvElectronics {
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
+		} catch (InterruptedException ie) {
+			ie.printStackTrace();
 		}
 
 	}
@@ -211,8 +215,8 @@ public class TvElectronics {
 	 * @throws Exception
 	 *             wenn der Wert von "start" nicht zum aktuellen Zustand passt
 	 */
-	public void recordTimeShift(boolean start, final JToggleButton play)
-			throws Exception {
+	public void recordTimeShift(boolean start, final JToggleButton play,
+			final Screen screen) throws Exception {
 		if (this.isRecording == start)
 			throw new Exception("TimeShift is already "
 					+ (this.isRecording ? "recording" : "stopped"));
@@ -264,6 +268,11 @@ public class TvElectronics {
 					+ " seconds");
 		System.out.println((start ? "Start" : "Stop") + " timeshift playing"
 				+ (start ? " (offset " + offset + " seconds)" : ""));
+	}
+
+	public void stopTimeshift(Screen screen) {
+		screen.setProgressBarValue(0);
+		(screen.getProgressBar()).setVisible(false);
 	}
 
 	public BufferedImage resize(BufferedImage img, int newW, int newH) {

@@ -276,22 +276,23 @@ public class RemoteControl {
 			btnRemoteTimeshiftPlayPause.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						if (screen == null)
+						if (screen == null){
 							System.out
 									.println("Kein Screen für die Aufnahme vorhanden.");
-						else {
+							btnRemoteTimeshiftPlayPause.setSelected(false);
+						} else {
 							if (btnRemoteTimeshiftPlayPause.isSelected()) {
 								btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(
 										RemoteControl.class
 												.getResource("/picture/p_play.png")));
 								electronics.recordTimeShift(true,
-										btnRemoteTimeshiftPlayPause);
+										btnRemoteTimeshiftPlayPause, screen);
 							} else {
 								btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(
 										RemoteControl.class
 												.getResource("/picture/p_paus.png")));
 								electronics.recordTimeShift(false,
-										btnRemoteTimeshiftPlayPause);
+										btnRemoteTimeshiftPlayPause, screen);
 							}
 						}
 					} catch (Exception e6) {
@@ -384,7 +385,7 @@ public class RemoteControl {
 			btnRemoteVolumeUp.setToolTipText("Increase Volume");
 			btnRemoteVolumeUp.setBounds(323, 516, 25, 25);
 			panelRemoteControl.add(btnRemoteVolumeUp);
-			// TODO integrate Settings in Remote Frame
+			
 			JPanel panelRemoteSettings = new JPanel();
 			panelRemoteSettings.setBounds(0, 0, 360, 640);
 			frame.getContentPane().add(panelRemoteSettings);
@@ -393,7 +394,7 @@ public class RemoteControl {
 		}
 	}
 
-	// TODO Deactivate PiP/Timeshift
+	// Deactivate PiP/Timeshift
 	public void updateButtonLayout() {
 		try {
 			switch (persistent.getUsermode()) {
