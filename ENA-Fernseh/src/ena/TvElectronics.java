@@ -121,7 +121,7 @@ public class TvElectronics {
 			this.channelPicPath = channelList;
 		screen.setEpgLabel(channelName);
 		screen.changePicture(channelList, forPiP);
-
+		screen.showPanelEPG(screen.getPanelScreenEPG());
 	}
 
 	/**
