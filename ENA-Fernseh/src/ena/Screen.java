@@ -66,7 +66,7 @@ public class Screen {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
-		// Panel für Willkommenbildschirm
+		// Panel fï¿½r Willkommenbildschirm
 		panelWelcome = new JPanel();
 		panelWelcome.setBounds(0, 0, 1280, 720);
 		frame.getContentPane().add(panelWelcome);
@@ -77,7 +77,7 @@ public class Screen {
 		lblScreenWelcomeMessage.setBounds(440, 98, 400, 100);
 		lblScreenWelcomeMessage.setHorizontalAlignment(SwingConstants.CENTER);
 		panelWelcome.add(lblScreenWelcomeMessage);
-		// Ladebalken für Willkommenbildschirm
+		// Ladebalken fï¿½r Willkommenbildschirm
 		progressBarScreenWelcome = new JProgressBar();
 		progressBarScreenWelcome.setBounds(320, 333, 640, 38);
 		panelWelcome.add(progressBarScreenWelcome);
@@ -87,14 +87,14 @@ public class Screen {
 		lblScreenWelcomeStatus.setHorizontalAlignment(SwingConstants.CENTER);
 		lblScreenWelcomeStatus.setBounds(320, 223, 640, 63);
 		panelWelcome.add(lblScreenWelcomeStatus);
-		// Panel für den Hauptbildschirm
+		// Panel fï¿½r den Hauptbildschirm
 		panelMainScreen = new JPanel();
 		panelMainScreen.setVisible(false);
 		panelMainScreen.setBackground(new Color(0, 0, 0));
 		panelMainScreen.setBounds(0, 0, 1280, 720);
 		frame.getContentPane().add(panelMainScreen);
 		panelMainScreen.setLayout(null);
-		// Progressbar für die Timeshift Funktion
+		// Progressbar fï¿½r die Timeshift Funktion
 		progressBarTimeShift = new JProgressBar();
 		progressBarTimeShift.setBounds(320, 600, 640, 38);
 		progressBarTimeShift.setVisible(false);
@@ -110,19 +110,19 @@ public class Screen {
 		panelScreenEPG.add(lblEPG, BorderLayout.CENTER);
 		lblEPG.setFont(new Font("Tahoma", Font.BOLD, 40));
 		lblEPG.setHorizontalAlignment(SwingConstants.CENTER);
-		// Panel für das PiP Fenster
+		// Panel fï¿½r das PiP Fenster
 		panelScreenPiP = new JPanel();
 		panelScreenPiP.setBounds(886, 11, 384, 216);
 		panelMainScreen.add(panelScreenPiP);
 		panelScreenPiP.setVisible(false);
 		panelScreenPiP.setLayout(null);
-		// ScrollPane für die Senderliste an der linken Seite (ausgeblendet)
+		// ScrollPane fï¿½r die Senderliste an der linken Seite (ausgeblendet)
 		final JScrollPane scrollPaneScreenStations = new JScrollPane();
 		scrollPaneScreenStations.setBorder(null);
 		scrollPaneScreenStations.setBackground(new Color(0, 0, 0));
 		scrollPaneScreenStations.setBounds(new Rectangle(-256, 0, 256, 720));
 		panelMainScreen.add(scrollPaneScreenStations);
-		// Senderliste für das ScrollPane
+		// Senderliste fï¿½r das ScrollPane
 		final JList<String> listScreenStations = new JList<String>();
 		listScreenStations.setForeground(new Color(216, 0, 116));
 		listScreenStations.setBackground(new Color(164, 164, 164));
@@ -144,7 +144,7 @@ public class Screen {
 			}
 		});
 		/*
-		 * für Debuggen JButton btnSenderliste = new JButton("Senderliste");
+		 * fï¿½r Debuggen JButton btnSenderliste = new JButton("Senderliste");
 		 * btnSenderliste.setBounds(377, 293, 85, 23);
 		 * panelMainScreen.add(btnSenderliste);
 		 * 
@@ -187,7 +187,7 @@ public class Screen {
 			System.out.println("TvElectronics wurde erstellt");
 		} else
 			System.out.println("TvElectronics ist schon vorhanden");
-		// Standart Bilder und Sender für das Haupt- und PiP-Fenster
+		// Standart Bilder und Sender fï¿½r das Haupt- und PiP-Fenster
 		BufferedImage myPicture;
 		try {
 			myPicture = ImageIO.read(new File("src/television/dasErste.jpg"));
@@ -231,7 +231,7 @@ public class Screen {
 
 	}
 
-	// Anpassung der Größe des Bildes für die Fenster
+	// Anpassung der Grï¿½ï¿½e des Bildes fï¿½r die Fenster
 	public BufferedImage resize(BufferedImage img, int newW, int newH) {
 		int w = img.getWidth();
 		int h = img.getHeight();
@@ -247,7 +247,7 @@ public class Screen {
 		return electronics;
 	}
 
-	// lässt panel auf der y-Achse bewegen
+	// lï¿½sst panel auf der y-Achse bewegen
 	public void scrollPanelY(JComponent panel, int max, int min) throws InterruptedException {
 		int time = 300 / Math.abs(max - min);
 		if (panel.getBounds().y == max) {
@@ -268,7 +268,7 @@ public class Screen {
 		}
 	}
 
-	// lässt panel auf der x-Achse bewegen
+	// lï¿½sst panel auf der x-Achse bewegen
 	private void scrollPanelX(JComponent panel, int max, int min) throws InterruptedException {
 		int time = 300 / Math.abs(max - min);
 		if (panel.getBounds().x == max) {
@@ -348,7 +348,7 @@ public class Screen {
 		panelMainScreen.add(progressBarTimeShift);
 	}
 
-	// das Bild in dem Haupt- oder PiP-Fenster ändern
+	// das Bild in dem Haupt- oder PiP-Fenster ï¿½ndern
 	// Hauptfenster, wenn choosePiP = false
 	public void changePicture(String channelPicturePath, boolean choosePiP) throws IOException {
 		BufferedImage newPicture;
@@ -376,5 +376,27 @@ public class Screen {
 	
 	public void setMaxProgressBar(int i) {
 		progressBarTimeShift.setMaximum(i);
+	}
+	
+	public void showPanelEPG(final JPanel panelScreenEPG) {
+		Thread progressEPG = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					if(panelScreenEPG.isVisible() == false){
+						panelScreenEPG.setVisible(true);
+						scrollPanelY(panelScreenEPG, 720, 592);
+					}
+					Thread.sleep(500);
+					if(panelScreenEPG.isVisible() == true){
+						scrollPanelY(panelScreenEPG, 720, 592);
+						panelScreenEPG.setVisible(false);
+					}
+				} catch (InterruptedException ie) {
+					ie.printStackTrace();
+				}
+			}
+		});
+		progressEPG.start();
 	}
 }
