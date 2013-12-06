@@ -41,6 +41,8 @@ public class TvElectronics {
 	private JPanel panelMainScreen;
 	private JLabel picLabelMain;
 	private Screen screen;
+	private Thread threadTimeshiftBar = null;
+	private boolean isPlaying = false;
 
 	/**
 	 * Der Konstruktur übernimmt Referenzen auf die beiden JPanel-Objekte, die
@@ -221,15 +223,8 @@ public class TvElectronics {
 			Thread progress = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					while (((screen.getProgressBar()).getValue() < (screen.getProgressBar()).getMaximum())
-							&& (play.isSelected())) {
-						(screen.getProgressBar()).setValue((screen.getProgressBar()).getValue() + 1);
-						try {
-							screen.setProgressBarValue((screen.getProgressBar()).getValue());
-							Thread.sleep(30);
-						} catch (InterruptedException ie) {
-							ie.printStackTrace();
-						}
+					while (isRecording) {
+						screen.setMaxProgressBar(((int) (now() - recordingStartTime)));
 					}
 				}
 			});
@@ -240,12 +235,12 @@ public class TvElectronics {
 		this.recordingStartTime = now();
 		System.out.println((start ? "Start" : "Stop") + " timeshift recording");
 	}
-	
-	public JProgressBar getProgressBar(){
+
+	public JProgressBar getProgressBar() {
 		return screen.getProgressBar();
 	}
-	
-	public void setProgressBarValue(int a){
+
+	public void setProgressBarValue(int a) {
 		screen.setProgressBarValue(a);
 	}
 
@@ -261,13 +256,56 @@ public class TvElectronics {
 	 *             wenn keine Aufzeichnung läuft oder noch nicht genug
 	 *             gepuffert ist
 	 */
-	public void playTimeShift(boolean start, int offset) throws Exception {
+	public void playTimeShift(final boolean start, int offset) throws Exception {
 		if (start && !this.isRecording)
 			throw new Exception("TimeShift is not recording");
 		if (start && this.recordingStartTime + offset > now())
 			throw new Exception("TimeShift has not yet buffered " + offset + " seconds");
 		System.out.println((start ? "Start" : "Stop") + " timeshift playing"
 				+ (start ? " (offset " + offset + " seconds)" : ""));
+		if (start)
+			isPlaying = true;
+		else
+			isPlaying = false;
+		if (threadTimeshiftBar != null) {
+			if (!threadTimeshiftBar.isAlive()) {
+				threadTimeshiftBar = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						while (isPlaying) {
+							try {
+								Thread.sleep(1000);
+								screen.addToProgressBar(1);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
+						}
+
+					}
+				});
+				threadTimeshiftBar.start();
+			}
+		} else {
+			threadTimeshiftBar = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					while (isPlaying) {
+						try {
+							Thread.sleep(1000);
+							screen.addToProgressBar(1);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+
+				}
+			});
+			threadTimeshiftBar.start();
+		}
 	}
 
 	public BufferedImage resize(BufferedImage img, int newW, int newH) {
@@ -280,9 +318,17 @@ public class TvElectronics {
 		g.dispose();
 		return dimg;
 	}
-	
-	public void setIsRecording(){
+
+	public void setIsRecording() {
 		isRecording = false;
+	}
+
+	public void killTimeshift() {
+		threadTimeshiftBar.stop();
+	}
+
+	public boolean isRecording() {
+		return isRecording;
 	}
 
 	// ======================================================================================================

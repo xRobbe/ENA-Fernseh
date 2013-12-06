@@ -130,13 +130,10 @@ public class Screen {
 		scrollPaneScreenStations.setViewportView(listScreenStations);
 		listScreenStations.setFont(new Font("Tahoma", Font.BOLD, 20));
 		listScreenStations.setModel(new AbstractListModel<String>() {
-			String[] values = new String[] { "1 ARD", "2 ZDF", "3 RTL",
-					"4 SAT1", "5 PRO7", "6 RTL2", "7 SUPER RTL", "8 KIKA",
-					"9 ARTE", "10 Comedy Central", "11 Nickelodeon",
-					"12 Kabel 1", "13 VOX", "14 MTV", "15 VIVA", "16 NTV",
-					"17 N24", "18 HR3", "19 123TV", "20 MotorvisionTV",
-					"21 Sport 1", "22 DMAX", "23 ASTRA TV", "24 ", "25", "26",
-					"27", "28", "29", "30" };
+			String[] values = new String[] { "1 ARD", "2 ZDF", "3 RTL", "4 SAT1", "5 PRO7", "6 RTL2", "7 SUPER RTL",
+					"8 KIKA", "9 ARTE", "10 Comedy Central", "11 Nickelodeon", "12 Kabel 1", "13 VOX", "14 MTV", "15 VIVA",
+					"16 NTV", "17 N24", "18 HR3", "19 123TV", "20 MotorvisionTV", "21 Sport 1", "22 DMAX", "23 ASTRA TV",
+					"24 ", "25", "26", "27", "28", "29", "30" };
 
 			public int getSize() {
 				return values.length;
@@ -186,8 +183,7 @@ public class Screen {
 		 */
 		// erstellt ein Objekt von TvElectronics
 		if (electronics == null) {
-			electronics = new TvElectronics(panelMainScreen, panelScreenPiP,
-					persisten, this);
+			electronics = new TvElectronics(panelMainScreen, panelScreenPiP, persisten, this);
 			System.out.println("TvElectronics wurde erstellt");
 		} else
 			System.out.println("TvElectronics ist schon vorhanden");
@@ -219,10 +215,8 @@ public class Screen {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while (progressBarScreenWelcome.getValue() < progressBarScreenWelcome
-						.getMaximum()) {
-					progressBarScreenWelcome.setValue(progressBarScreenWelcome
-							.getValue() + 1);
+				while (progressBarScreenWelcome.getValue() < progressBarScreenWelcome.getMaximum()) {
+					progressBarScreenWelcome.setValue(progressBarScreenWelcome.getValue() + 1);
 					try {
 						Thread.sleep(30);
 					} catch (InterruptedException ie) {
@@ -243,8 +237,7 @@ public class Screen {
 		int h = img.getHeight();
 		BufferedImage dimg = new BufferedImage(newW, newH, img.getType());
 		Graphics2D g = dimg.createGraphics();
-		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		g.drawImage(img, 0, 0, newW, newH, 0, 0, w, h, null);
 		g.dispose();
 		return dimg;
@@ -255,21 +248,20 @@ public class Screen {
 	}
 
 	// lässt panel auf der y-Achse bewegen
-	public void scrollPanelY(JComponent panel, int max, int min)
-			throws InterruptedException {
+	public void scrollPanelY(JComponent panel, int max, int min) throws InterruptedException {
 		int time = 300 / Math.abs(max - min);
 		if (panel.getBounds().y == max) {
 			panel.setVisible(true);
 			while (panel.getBounds().y > min) {
-				panel.setBounds(panel.getBounds().x, panel.getBounds().y - 1,
-						panel.getBounds().width, panel.getBounds().height);
+				panel.setBounds(panel.getBounds().x, panel.getBounds().y - 1, panel.getBounds().width,
+						panel.getBounds().height);
 				Thread.sleep(time);
 
 			}
 		} else if (panel.getBounds().y == min) {
 			while (panel.getBounds().y < max) {
-				panel.setBounds(panel.getBounds().x, panel.getBounds().y + 1,
-						panel.getBounds().width, panel.getBounds().height);
+				panel.setBounds(panel.getBounds().x, panel.getBounds().y + 1, panel.getBounds().width,
+						panel.getBounds().height);
 				Thread.sleep(time);
 			}
 			panel.setVisible(false);
@@ -277,21 +269,20 @@ public class Screen {
 	}
 
 	// lässt panel auf der x-Achse bewegen
-	private void scrollPanelX(JComponent panel, int max, int min)
-			throws InterruptedException {
+	private void scrollPanelX(JComponent panel, int max, int min) throws InterruptedException {
 		int time = 300 / Math.abs(max - min);
 		if (panel.getBounds().x == max) {
 			while (panel.getBounds().x > min) {
-				panel.setBounds(panel.getBounds().x - 1, panel.getBounds().y,
-						panel.getBounds().width, panel.getBounds().height);
+				panel.setBounds(panel.getBounds().x - 1, panel.getBounds().y, panel.getBounds().width,
+						panel.getBounds().height);
 				Thread.sleep(time);
 			}
 			panel.setVisible(false);
 		} else if (panel.getBounds().x == min) {
 			panel.setVisible(true);
 			while (panel.getBounds().x < max) {
-				panel.setBounds(panel.getBounds().x + 1, panel.getBounds().y,
-						panel.getBounds().width, panel.getBounds().height);
+				panel.setBounds(panel.getBounds().x + 1, panel.getBounds().y, panel.getBounds().width,
+						panel.getBounds().height);
 				Thread.sleep(time);
 			}
 		}
@@ -341,16 +332,16 @@ public class Screen {
 	public void setProgressBarValue(int bar) {
 		(this.progressBarTimeShift).setValue(bar);
 	}
-	
-	public void setTimeshiftThread(Thread timeshiftThread){
+
+	public void setTimeshiftThread(Thread timeshiftThread) {
 		this.timeshiftThread = timeshiftThread;
 	}
-	
-	public Thread getTimeshiftThread(){
+
+	public Thread getTimeshiftThread() {
 		return timeshiftThread;
 	}
-	
-	public void setProgressBar(JProgressBar progressBarTimeShift){
+
+	public void setProgressBar(JProgressBar progressBarTimeShift) {
 		this.progressBarTimeShift = progressBarTimeShift;
 		progressBarTimeShift.setBounds(320, 600, 640, 38);
 		progressBarTimeShift.setVisible(false);
@@ -359,8 +350,7 @@ public class Screen {
 
 	// das Bild in dem Haupt- oder PiP-Fenster ändern
 	// Hauptfenster, wenn choosePiP = false
-	public void changePicture(String channelPicturePath, boolean choosePiP)
-			throws IOException {
+	public void changePicture(String channelPicturePath, boolean choosePiP) throws IOException {
 		BufferedImage newPicture;
 		newPicture = ImageIO.read(new File(channelPicturePath));
 		if (!(choosePiP)) {
@@ -377,5 +367,14 @@ public class Screen {
 			panelScreenPiP.add(picLabelPiP);
 			panelScreenPiP.repaint();
 		}
+	}
+
+	public void addToProgressBar(int i) {
+		progressBarTimeShift.setValue(progressBarTimeShift.getValue() + i);
+		System.out.println(progressBarTimeShift.getValue());
+	}
+	
+	public void setMaxProgressBar(int i) {
+		progressBarTimeShift.setMaximum(i);
 	}
 }

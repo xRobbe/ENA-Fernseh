@@ -84,7 +84,7 @@ public class RemoteControl {
 			// Window Frame
 			frame = new JFrame();
 			frame.setResizable(false);
-			frame.setBounds(100, 100, 366, 666);
+			frame.setBounds(1300, 100, 366, 666);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.getContentPane().setLayout(null);
 			// Remote Panel
@@ -105,6 +105,7 @@ public class RemoteControl {
 					} else {
 						screen.setVisible(false);
 						screen.dispose();
+						electronics.killTimeshift();
 					}
 				}
 			});
@@ -192,13 +193,11 @@ public class RemoteControl {
 					try {
 						if (screen != null) {
 							if (screen.isVisible()) {
-								electronics.setChannel(
-										String.valueOf(tableRemoteStations.getValueAt(
-												tableRemoteStations.getSelectedRow(), 0)),
-										switchActive,
-										String.valueOf(tableRemoteStations.getValueAt(
-												tableRemoteStations.getSelectedRow(), 1)), screen,
-										channelList.get(tableRemoteStations.getSelectedRow()).getChannelPicturePath());
+								electronics.setChannel(String.valueOf(tableRemoteStations.getValueAt(
+										tableRemoteStations.getSelectedRow(), 0)), switchActive, String
+										.valueOf(tableRemoteStations.getValueAt(tableRemoteStations.getSelectedRow(), 1)),
+										screen, channelList.get(tableRemoteStations.getSelectedRow())
+												.getChannelPicturePath());
 								if ((persistent.getRatio() == 1) || (persistent.getRatio() == 2))
 									electronics.setZoom(true);
 								// screen.changePicture(channelList.get(
@@ -242,13 +241,30 @@ public class RemoteControl {
 			btnRemoteTimeshiftStop.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					// screen.getTimeshiftThread().interrupt();
-					(screen.getPanelMain()).remove(screen.getProgressBar());
-					electronics.setIsRecording();
-					btnRemoteTimeshiftPlayPause.setSelected(false);
-					btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class
-							.getResource("/picture/p_paus.png")));
-					(screen.getPanelMain()).repaint();
-					screen.setProgressBar(new JProgressBar());
+					if (screen == null) {
+						System.out.println("Kein Screen für die Aufnahme vorhanden.");
+						btnRemoteTimeshiftPlayPause.setSelected(false);
+					} else {
+						if (!screen.isVisible()) {
+							System.out.println("Kein Screen für die Aufnahme vorhanden.");
+							btnRemoteTimeshiftPlayPause.setSelected(false);
+						} else {
+							try {
+								electronics.recordTimeShift(false, btnRemoteTimeshiftPlayPause, screen);
+
+								(screen.getPanelMain()).remove(screen.getProgressBar());
+								electronics.setIsRecording();
+								btnRemoteTimeshiftPlayPause.setSelected(false);
+								btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class
+										.getResource("/picture/p_paus.png")));
+								(screen.getPanelMain()).repaint();
+								screen.setProgressBar(new JProgressBar());
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+					}
 				}
 			});
 			btnRemoteTimeshiftStop.setFocusPainted(false);
@@ -267,14 +283,25 @@ public class RemoteControl {
 							System.out.println("Kein Screen für die Aufnahme vorhanden.");
 							btnRemoteTimeshiftPlayPause.setSelected(false);
 						} else {
-							if (btnRemoteTimeshiftPlayPause.isSelected()) {
-								btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class
-										.getResource("/picture/p_play.png")));
-								electronics.recordTimeShift(true, btnRemoteTimeshiftPlayPause, screen);
+							if (!screen.isVisible()) {
+								System.out.println("Kein Screen für die Aufnahme vorhanden.");
+								btnRemoteTimeshiftPlayPause.setSelected(false);
 							} else {
-								btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class
-										.getResource("/picture/p_paus.png")));
-								electronics.recordTimeShift(false, btnRemoteTimeshiftPlayPause, screen);
+								if (btnRemoteTimeshiftPlayPause.isSelected()) {
+									btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class
+											.getResource("/picture/p_play.png")));
+									if (!electronics.isRecording())
+										electronics.recordTimeShift(true, btnRemoteTimeshiftPlayPause, screen);
+									else
+										electronics.playTimeShift(false, screen.getProgressBar().getValue());
+									System.out.println("Pause");
+								} else {
+									btnRemoteTimeshiftPlayPause.setIcon(new ImageIcon(RemoteControl.class
+											.getResource("/picture/p_paus.png")));
+									electronics.playTimeShift(true, screen.getProgressBar().getValue());
+									System.out.println("Play");
+
+								}
 							}
 						}
 					} catch (Exception e6) {
@@ -291,21 +318,32 @@ public class RemoteControl {
 			btnRemoteTimeshiftForwards.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_ffarw.png")));
 			btnRemoteTimeshiftForwards.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					screen.getTimeshiftThread().stop();
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							while ((electronics.getProgressBar()).getValue() < (electronics.getProgressBar()).getMaximum()) {
-								(electronics.getProgressBar()).setValue((electronics.getProgressBar()).getValue() + 1);
-								try {
-									electronics.setProgressBarValue((electronics.getProgressBar()).getValue());
-									Thread.sleep(30);
-								} catch (InterruptedException ie) {
-									ie.printStackTrace();
+					if (screen == null) {
+						System.out.println("Kein Screen Vorhanden");
+					} else {
+						if (!screen.isVisible()) {
+							System.out.println("Kein Screen Vorhanden");
+						} else {
+
+							screen.getTimeshiftThread().stop();
+							new Thread(new Runnable() {
+								@Override
+								public void run() {
+
+									while ((electronics.getProgressBar()).getValue() < (electronics.getProgressBar())
+											.getMaximum()) {
+										(electronics.getProgressBar()).setValue((electronics.getProgressBar()).getValue() + 1);
+										try {
+											electronics.setProgressBarValue((electronics.getProgressBar()).getValue());
+											Thread.sleep(30);
+										} catch (InterruptedException ie) {
+											ie.printStackTrace();
+										}
+									}
 								}
-							}
+							}).start();
 						}
-					});
+					}
 				}
 			});
 			btnRemoteTimeshiftForwards.setFocusPainted(false);
