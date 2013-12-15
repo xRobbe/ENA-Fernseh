@@ -81,7 +81,7 @@ public class TvElectronics {
 
 		// TO DO (Aufgabe 5): Implementieren Sie hier das Einlesen von
 		// Kanalscan.csv!
-
+		
 		System.out.println("All channels scanned");
 		return channels;
 	}
