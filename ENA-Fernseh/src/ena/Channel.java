@@ -52,14 +52,7 @@ public class Channel {
 			String zeile = null;
 			while ((zeile = in.readLine()) != null){
 				splitLine = zeile.split(";");
-				String picPath = "src/television/" + splitLine[3] + ".jpg";
-				if(!(testFile = new File(picPath)).exists()){
-					picPath = "src/television/" + splitLine[3] + ".png";
-					if(!(testFile = new File(picPath)).exists()){
-						picPath = "src/television/testbild.png";
-					}
-				}
-				list.add(new Channel (splitLine[1], splitLine[3], picPath));
+				list.add(new Channel (splitLine[0], splitLine[1], splitLine[2]));
 			}
 			/*
 			 * list.add(new Channel("37a", "ARD",

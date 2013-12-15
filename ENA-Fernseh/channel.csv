@@ -1,34 +1,34 @@
-198500;8a;58;PHOENIX;ARD
-198500;8b;58;Bayerisches FS;ARD
-198500;8c;58;SWR Fernsehen RP;ARD
-482000;22a;92;ZDF;ZDFmobil
-482000;22b;92;3sat;ZDFmobil
-482000;22c;92;ZDFinfokanal;ZDFmobil
-482000;22d;92;Doku/KiKa;ZDFmobil
-546000;30a;58;3sat;ZDFmobil
-546000;30b;58;ZDF;ZDFmobil
-546000;30c;58;ZDFinfokanal;ZDFmobil
-546000;30d;58;Doku/KiKa;ZDFmobil
-578000;34a;92;RTL Television;RTL World
-578000;34b;92;RTL2;RTL World
-578000;34c;92;Super RTL;RTL World
-578000;34d;92;VOX;RTL World
-602000;37a;91;Das Erste;ARD
-602000;37b;91;hr-fernsehen;ARD
-602000;37c;91;arteEinsExtra;ARD
-658000;44a;10;Bayerisches FS;SWR
-658000;44b;10;hr-fernsehen;SWR
-658000;44c;10;SWR Fernsehen RP;SWR
-658000;44d;10;WDR Fernsehen;SWR
-738000;54a;93;kabel eins;ProSiebenSat.1
-738000;54b;93;N24;ProSiebenSat.1
-738000;54c;93;ProSieben;ProSiebenSat.1
-738000;54d;93;SAT.1;ProSiebenSat.1
-762000;57a;41;arte;SWR
-762000;57b;41;Phoenix;SWR
-762000;57c;41;EinsPlus;SWR
-762000;57d;41;Das Erste;SWR
-818000;64a;57;TELE 5;BetaDigital
-818000;64b;57;Eurosport;MEDIA BROADCAST
-818000;64c;57;rheinmaintv;MEDIA BROADCAST
-818000;64a;57;Disney Channel;BetaDigital
+8a;PHOENIX;src/television/testbild.png
+8b;Bayerisches FS;src/television/testbild.png
+8c;SWR Fernsehen RP;src/television/testbild.png
+22a;ZDF;src/television/ZDF.jpg
+22b;3sat;src/television/testbild.png
+22c;ZDFinfokanal;src/television/testbild.png
+22d;Doku/KiKa;src/television/testbild.png
+30a;3sat;src/television/testbild.png
+30b;ZDF;src/television/ZDF.jpg
+30c;ZDFinfokanal;src/television/testbild.png
+30d;Doku/KiKa;src/television/testbild.png
+34a;RTL Television;src/television/testbild.png
+34b;RTL2;src/television/testbild.png
+34c;Super RTL;src/television/testbild.png
+34d;VOX;src/television/testbild.png
+37a;Das Erste;src/television/testbild.png
+37b;hr-fernsehen;src/television/testbild.png
+37c;arteEinsExtra;src/television/testbild.png
+44a;Bayerisches FS;src/television/testbild.png
+44b;hr-fernsehen;src/television/testbild.png
+44c;SWR Fernsehen RP;src/television/testbild.png
+44d;WDR Fernsehen;src/television/testbild.png
+54a;kabel eins;src/television/testbild.png
+54b;N24;src/television/testbild.png
+54c;ProSieben;src/television/testbild.png
+54d;SAT.1;src/television/testbild.png
+57a;arte;src/television/arte.png
+57b;Phoenix;src/television/testbild.png
+57c;EinsPlus;src/television/testbild.png
+57d;Das Erste;src/television/testbild.png
+64a;TELE 5;src/television/testbild.png
+64b;Eurosport;src/television/testbild.png
+64c;rheinmaintv;src/television/testbild.png
+64a;Disney Channel;src/television/testbild.png

@@ -69,6 +69,7 @@ public class RemoteControl {
 	 */
 	// Konstruktor
 	public RemoteControl() {
+		PersisChannel persisChannel = new PersisChannel();
 		channelList = Channel.exampleFill();
 		persistent = new Persistent();
 		initialize();
