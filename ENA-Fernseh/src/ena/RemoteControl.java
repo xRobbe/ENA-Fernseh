@@ -46,6 +46,7 @@ public class RemoteControl {
 	private JButton btnRemoteTimeshiftStop;
 	private JToggleButton btnRemoteTimeshiftPlayPause;
 	private JButton btnRemoteTimeshiftForwards;
+	private JScrollPane scrollPaneRemoteStations;
 
 	/**
 	 * Launch the application.
@@ -100,7 +101,7 @@ public class RemoteControl {
 			btnRemotePower.addActionListener(new RunnableActionListener() {
 				public void run() {
 					if (screen == null || !screen.isVisible()) {
-						screen = new Screen(persistent);
+						screen = new Screen(persistent, scrollPaneRemoteStations);
 						screen.setVisible(true);
 						electronics = screen.getElectronics();
 					} else {
@@ -182,7 +183,7 @@ public class RemoteControl {
 			btnRemoteSettings.setBounds(10, 10, 77, 77);
 			panelRemoteControl.add(btnRemoteSettings);
 			// ChannelList ScrollPane
-			JScrollPane scrollPaneRemoteStations = new JScrollPane();
+			scrollPaneRemoteStations = new JScrollPane();
 			scrollPaneRemoteStations.setBounds(10, 98, 338, 408);
 			panelRemoteControl.add(scrollPaneRemoteStations);
 			// Channel Table
@@ -236,6 +237,7 @@ public class RemoteControl {
 			tableRemoteStations.getColumnModel().getColumn(1).setPreferredWidth(250);
 			tableRemoteStations.getColumnModel().getColumn(1).setMinWidth(200);
 			scrollPaneRemoteStations.setViewportView(tableRemoteStations);
+			scrollPaneRemoteStations.setVisible(false);
 			// TimeShift Stop Button
 			btnRemoteTimeshiftStop = new JButton();
 			btnRemoteTimeshiftStop.setIcon(new ImageIcon(RemoteControl.class.getResource("/picture/p_stop.png")));

@@ -45,13 +45,15 @@ public class Screen {
 	private JLabel picLabelPiP;
 	private JPanel panelScreenPiP;
 	private Thread timeshiftThread;
+	private JScrollPane scrollPaneRemoteStations;
 
 	private JLabel lblEPG = new JLabel("Das Erste");
 	private JPanel panelScreenEPG;
 
 	// Screen Konstruktor
-	public Screen(Persistent persistent) {
+	public Screen(Persistent persistent, JScrollPane scrollPaneRemoteStations) {
 		this.persisten = persistent;
+		this.scrollPaneRemoteStations = scrollPaneRemoteStations;
 		initialize();
 	}
 
@@ -217,6 +219,8 @@ public class Screen {
 			public void run() {
 				while (progressBarScreenWelcome.getValue() < progressBarScreenWelcome.getMaximum()) {
 					progressBarScreenWelcome.setValue(progressBarScreenWelcome.getValue() + 1);
+					if (progressBarScreenWelcome.getValue() == 75)
+						scrollPaneRemoteStations.setVisible(true);
 					try {
 						Thread.sleep(30);
 					} catch (InterruptedException ie) {
