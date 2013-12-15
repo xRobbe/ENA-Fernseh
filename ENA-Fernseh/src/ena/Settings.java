@@ -112,6 +112,9 @@ public class Settings {
 											.getValue() + 1);
 							Thread.sleep(50);
 						}
+						PersisChannel persisChannel = new PersisChannel();
+						remote.getTableRemoteStations().invalidate();
+						remote.getScrollPaneRemoteStations().repaint();
 						btnStationScan.setEnabled(true);
 						btnSettingsSave.setEnabled(true);
 					} catch (Exception e1) {

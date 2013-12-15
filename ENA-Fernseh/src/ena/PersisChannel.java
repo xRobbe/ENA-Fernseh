@@ -31,7 +31,7 @@ public class PersisChannel {
 						picPath = "src/television/testbild.png";
 					}
 				}
-				writer.write(spiltLine[1] + ";" + spiltLine[3] + ";" + picPath + "\n");
+				writer.write(spiltLine[1] + ";" + spiltLine[3] + ";" + picPath + System.getProperty("line.separator"));
 			}
 			writer.flush();		//schreibt den Stream in die Datei
 			writer.close();

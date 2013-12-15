@@ -14,6 +14,8 @@ public class Channel {
 	private static File testFile;
 	private static String[] splitLine;
 	private static String picPath;
+	private static File file;
+	private static PersisChannel persisChannel;
 
 	Channel(String channelNumber, String channelName, String channelPicturePath) {
 		this.setChannelNumber(channelNumber);
@@ -48,6 +50,8 @@ public class Channel {
 	public static ArrayList<Channel> exampleFill() {
 		ArrayList<Channel> list = new ArrayList<Channel>();
 		try {
+			if(!(new File("channel.csv").exists()))
+				persisChannel = new PersisChannel();
 			BufferedReader in = new BufferedReader(new FileReader("channel.csv"));
 			String zeile = null;
 			while ((zeile = in.readLine()) != null){

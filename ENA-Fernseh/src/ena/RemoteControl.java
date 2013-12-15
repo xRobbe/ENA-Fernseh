@@ -70,7 +70,7 @@ public class RemoteControl {
 	 */
 	// Konstruktor
 	public RemoteControl() {
-		PersisChannel persisChannel = new PersisChannel();
+		//PersisChannel persisChannel = new PersisChannel();
 		channelList = Channel.exampleFill();
 		persistent = new Persistent();
 		initialize();
@@ -458,5 +458,12 @@ public class RemoteControl {
 	public JButton getPiPActive() {
 		return btnRemotePiPActivate;
 	}
-
+	
+	public JTable getTableRemoteStations(){
+		return tableRemoteStations;
+	}
+	
+	public JScrollPane getScrollPaneRemoteStations(){
+		return scrollPaneRemoteStations;
+	}
 }
